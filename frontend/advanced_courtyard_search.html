@@ -59,7 +59,8 @@
             let label = "Двор-восьмиугольник";
             let rating = 4.7;
 
-            let card = generateCourtyardCard(label, address, rating)
+            let card = addColumnClass(generateCourtyardCard(label, address, rating))
+
             let list = document.getElementById("courtyards-list");
             for (let index = 0; index < 5; index++) {
                 list.innerHTML += card;

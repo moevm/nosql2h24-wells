@@ -56,7 +56,7 @@
             let patronymic = "Иванович";
             let visited = 123;
 
-            let card = generateUserCard(username, last_name, first_name, patronymic, visited)
+            let card = addColumnClass(generateUserCard(username, last_name, first_name, patronymic, visited))
             let list = document.getElementById("users-list");
             list.innerHTML += card;
         }
