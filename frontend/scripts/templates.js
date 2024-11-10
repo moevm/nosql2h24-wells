@@ -20,13 +20,13 @@ function addColumnClass(card) {
     return addClass(card, 'col-md-6');
 }
 
-function generateCourtyardCard(label, address, rating) {
+function generateCourtyardCard(title, address, rating) {
     rating = normalizeRating(rating);
     return `<div class="mb-3 advanced-search-card">
                 <div class="list-group-item">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6>${label}</h6>
+                            <h6>${title}</h6>
                             <p class="mb-0 text-muted">${address}</p>
                             <small class="text-warning">★ ${rating}</small>
                         </div>
