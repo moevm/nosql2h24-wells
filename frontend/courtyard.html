@@ -68,31 +68,42 @@
     <script type= "text/javascript" src= "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
     <script src="scripts/templates.js"></script>
     <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+
         window.onload = () => {
             // courtyard info
-            let address = "Рылеева, 22";
-            let title = "Двор-восьмиугольник";
-            let mean_rating = 4.7;
-            let users_visited = 250;
-            document.getElementById("mean_rating").innerHTML = mean_rating;
-            document.getElementById("title").innerHTML = title;
-            document.getElementById("address").innerHTML = address;
-            document.getElementById("users_visited").innerHTML = users_visited;
+            fetch(`http://localhost:8081/courtyards/${id}`, { 
+                // mode: 'no-cors', 
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then((resp) => resp.json().then((body) => {
+                    document.getElementById("mean_rating").innerHTML = body['average_rating'];
+                    document.getElementById("title").innerHTML = body['title'];
+                    document.getElementById("address").innerHTML = body['houses'];
+                    document.getElementById("users_visited").innerHTML = body['visits_count'];
+                }));
+            
 
             // reviews
-            let rating = 5;
-            let comment = 'Во дворе трава. На траве дрова. Не руби дрова на траве двора.';
-            let visited_at = "01.01.2024";
-            let username = "ivanovii";
-            let last_name = "Иванов";
-            let first_name = "Иван";
-            let patronymic = "Иванович";
-            
-            let card = generateReviewCard(username, last_name, first_name, patronymic, visited_at, rating, comment);
-            let list = document.getElementById("reviews");
-            for (let index = 0; index < 12; index++) {
-                list.innerHTML += card;
-            }
+            fetch(`http://localhost:8081/courtyards/${id}/visits?limit=10`, { 
+                // mode: 'no-cors', 
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then((resp) => resp.json().then((body) => {
+                    for(let i = 0; i < body.length; i++) {
+                        let review = body[i];
+                        let user = review.user;
+                        let card = generateReviewCard(user.nickname, user.last_name, user.first_name, user.patronymic, review.visited_at, review.rating, review.comment);
+                        document.getElementById("reviews").innerHTML += card;
+                    }
+                }));
         }
     </script>
 </body>
