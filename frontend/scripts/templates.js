@@ -21,6 +21,11 @@ function addColumnClass(card) {
     return addClass(card, 'col-md-6');
 }
 
+function timestampToDate(timestamp) {
+    let date = new Date(timestamp);
+    return date.toLocaleDateString();
+}
+
 function generateCourtyardCard(title, address, rating, id) {
     rating = normalizeRating(rating);
     return `<div class="mb-3 advanced-search-card">
@@ -37,7 +42,7 @@ function generateCourtyardCard(title, address, rating, id) {
             </div>`
 }
 
-function generateUserCard(username, last_name, first_name, patronymic, visited) {
+function generateUserCard(username, last_name, first_name, patronymic, visited, id) {
 
     return `<div class="mb-3 advanced-search-card">
                 <div class="list-group-item d-flex justify-content-between align-items-center">
@@ -47,20 +52,20 @@ function generateUserCard(username, last_name, first_name, patronymic, visited) 
                         <br>
                         <small class="text-danger">${visited} двора</small>
                     </span>
-                    <a href="profile.html?id=321" class=""><span class="material-icons purple f-24">open_in_new</span></a>
+                    <a href="profile.html?id=${id}" class=""><span class="material-icons purple f-24">open_in_new</span></a>
                 </div>
             </div>`
 }
 
-function generateVisitCard(title, address, rating, visited_at) {
+function generateVisitCard(title, address, rating, visited_at, id) {
     rating = normalizeRating(rating);
     return `<div class="list-group-item">
-                <a href="courtyard.html?id=123" class="link-dark">
+                <a href="courtyard.html?id=${id}" class="link-dark">
                     <h6 class="mb-1 link-dark" id="title">${title}</h6>
                 </a>
                 <p class="mb-0" id="rating">${address}</p>
                 <div class="d-flex justify-content-between">
-                    <p class="mb-0">★ <span id="rating">${rating}</span></p>
+                    <p class="mb-0"><span class="text-warning">★</span> <span id="rating">${rating}</span></p>
                     <small class="text-muted">Посетил <span id="visited_at">${visited_at}</span></small>
                 </div>
             </div>`
