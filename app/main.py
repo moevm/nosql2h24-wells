@@ -1,4 +1,5 @@
 import sys
+import math
 
 from fastapi import FastAPI, Request, Response, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -168,8 +169,19 @@ def initialize_demo_data():
     user_check = db.query("MATCH (u:User) RETURN count(u) AS count")
     if user_check[0]['count'] > 0:
         return
+    def create_coordinates(longitude: float, latitude: float):
+        r = 0.0005
+        coords = []
+        for i in range(8):
+            coords.append({
+                "longitude": longitude + r * math.cos(i * math.pi / 4),
+                "latitude": latitude + r * math.sin(i * math.pi / 4)
+            })
+        return coords
 
     print("Инициализация демонстрационных данных...")
+    coord1 = create_coordinates(longitude=30.3550986, latitude=59.9342802)
+    coord2 = create_coordinates(longitude=30.3450986, latitude=59.9442802)
     demo_data = {
         'users': [
             {
@@ -201,32 +213,12 @@ def initialize_demo_data():
             {
                 "title": "Двор 1",
                 "houses": ["ул. Пушкина, 10", "ул. Пушкина, 12"],
-                "coordinates": [
-                    {"longitude": 37.7173, "latitude": 55.7558},
-                    {"longitude": 37.7171, "latitude": 55.7558},
-                    {"longitude": 37.7175, "latitude": 55.7558},
-                    {"longitude": 37.7173, "latitude": 55.7560},
-                    {"longitude": 37.7173, "latitude": 55.7556},
-                    {"longitude": 37.7171, "latitude": 55.7560},
-                    {"longitude": 37.7175, "latitude": 55.7560},
-                    {"longitude": 37.7171, "latitude": 55.7556},
-                    {"longitude": 37.7175, "latitude": 55.7556}
-                ]
+                "coordinates": coord1
             },
             {
                 "title": "Двор 2",
                 "houses": ["ул. Ленина, 15", "ул. Ленина, 17"],
-                "coordinates": [
-                    {"longitude": 37.6183, "latitude": 55.7578},
-                    {"longitude": 37.6181, "latitude": 55.7578},
-                    {"longitude": 37.6185, "latitude": 55.7578},
-                    {"longitude": 37.6183, "latitude": 55.7580},
-                    {"longitude": 37.6183, "latitude": 55.7576},
-                    {"longitude": 37.6181, "latitude": 55.7580},
-                    {"longitude": 37.6185, "latitude": 55.7580},
-                    {"longitude": 37.6181, "latitude": 55.7576},
-                    {"longitude": 37.6185, "latitude": 55.7576}
-                ]
+                "coordinates": coord2
             }
         ],
         'visits': [
