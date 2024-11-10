@@ -1,6 +1,7 @@
 import sys
 
 from fastapi import FastAPI, Request, Response, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import db
 from app.user_service import create_user, get_user_by_id, visit_courtyard, search_users, update_user, \
@@ -8,6 +9,15 @@ from app.user_service import create_user, get_user_by_id, visit_courtyard, searc
 from app.courtyard_service import create_courtyard, search_courtyards, get_courtyard_by_id, get_courtyard_by_title
 
 app = FastAPI()
+allowed_origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
+)
 
 
 @app.post("/login")
@@ -192,15 +202,15 @@ def initialize_demo_data():
                 "title": "Двор 1",
                 "houses": ["ул. Пушкина, 10", "ул. Пушкина, 12"],
                 "coordinates": [
-                    {"longitude": 37.6173, "latitude": 55.7558},
-                    {"longitude": 37.6171, "latitude": 55.7558},
-                    {"longitude": 37.6175, "latitude": 55.7558},
-                    {"longitude": 37.6173, "latitude": 55.7560},
-                    {"longitude": 37.6173, "latitude": 55.7556},
-                    {"longitude": 37.6171, "latitude": 55.7560},
-                    {"longitude": 37.6175, "latitude": 55.7560},
-                    {"longitude": 37.6171, "latitude": 55.7556},
-                    {"longitude": 37.6175, "latitude": 55.7556}
+                    {"longitude": 37.7173, "latitude": 55.7558},
+                    {"longitude": 37.7171, "latitude": 55.7558},
+                    {"longitude": 37.7175, "latitude": 55.7558},
+                    {"longitude": 37.7173, "latitude": 55.7560},
+                    {"longitude": 37.7173, "latitude": 55.7556},
+                    {"longitude": 37.7171, "latitude": 55.7560},
+                    {"longitude": 37.7175, "latitude": 55.7560},
+                    {"longitude": 37.7171, "latitude": 55.7556},
+                    {"longitude": 37.7175, "latitude": 55.7556}
                 ]
             },
             {
