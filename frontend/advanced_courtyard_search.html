@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расширенный поиск дворов</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <h2 class="header py-2">Расширенный поиск дворов</h2>
+        </div>
+        <div class="content p-4">
+            <form class="mb-4">
+                <div class="form-row mb-3">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Адрес">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Название">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Рейтинг">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Долгота">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Широта">
+                    </div>
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary btn-block">Найти</button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="list-group">
+                
+            </div>
+
+            <div class="row" id="courtyards-list">
+                
+
+                
+            </div>
+        </div>
+
+    </div>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="scripts/templates.js"></script>
+    <script>
+        window.onload = () => {
+            let address = "Рылеева, 22";
+            let label = "Двор-восьмиугольник";
+            let rating = 4.7;
+
+            let card = generateCourtyardCard(label, address, rating)
+            let list = document.getElementById("courtyards-list");
+            for (let index = 0; index < 5; index++) {
+                list.innerHTML += card;
+            }
+            console.log("aa");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расширенный поиск пользователей</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <h2 class="header py-2">Расширенный поиск пользователей</h2>
+        </div>
+        <div class="content p-4">
+            <form class="mb-4" method="GET">
+                <div class="form-row mb-3">
+                    <div class="col">
+                        <input name="last_name" type="text" class="form-control" placeholder="Фамилия">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Имя">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Отчество">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Никнейм">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Посетил дворов">
+                    </div>
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary btn-block" id="find">Найти</button>
+                    </div>
+                </div>
+            </form>
+            <div class="row" id="users-list">
+                
+
+
+            </div>
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="scripts/templates.js"></script>
+    <script>
+        window.onload = () => {
+            document.getElementById("find").onclick = () => console.log("AA")
+            let username = "ivanovii";
+            let last_name = "Иванов";
+            let first_name = "Иван";
+            let patronymic = "Иванович";
+            let visited = 123;
+
+            let card = generateUserCard(username, last_name, first_name, patronymic, visited)
+            let list = document.getElementById("users-list");
+            list.innerHTML += card;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карта и список</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container-fluid h-100">
+        <div class="row h-100">
+            <div class="col-md-4 p-3 overflow-auto">
+                <div class="search mb-3 d-flex align-items-center">
+                    <input type="text" class="form-control mr-2" placeholder="Поиск по дворам">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+                <div class="list-group">
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6>Двор-восьмиугольник</h6>
+                                <p class="mb-0 text-muted">Рылеева, 22</p>
+                                <small class="text-warning">★ 4,7</small>
+                            </div>
+                            <a href="#" class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="search my-3 d-flex align-items-center">
+                    <input type="text" class="form-control mr-2" placeholder="Поиск по пользователям">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+                <div class="list-group">
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6>ivanovii aka Иванов Иван Иванович</h6>
+                                <small class="text-danger">123 двора</small>
+                            </div>
+                            <a href="#" class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 p-0">
+                <div id="map" class="w-100 h-100"></div>
+            </div>
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="https://api-maps.yandex.ru/2.0-stable/?apikey=0faafbbe-1718-4c19-b6e2-46f316ed4ba5&load=package.full&lang=ru-RU" type="text/javascript"></script>
+    <script>
+        ymaps.ready(init);
+
+        function init() {
+            var myMap = new ymaps.Map ('map', {
+                center: [59.9342802, 30.3350986], // lat lon
+                zoom: 13
+            });
+        }
+        // https://tokmakov.msk.ru/blog/item/16
+    </script>
+</body>
+</html>
