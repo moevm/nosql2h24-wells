@@ -44,12 +44,13 @@
                         <input type="radio" name="rating" id="star4" value="4"> 4 
                         <input type="radio" name="rating" id="star5" value="5"> 5 
                     </div>
+                    <p id="error" class="text-danger mb-0"></p>
                 </div>
             </div>
             <div class="input-group mb-4">
-                <textarea class="form-control" placeholder="Добавить свой отзыв"></textarea>
+                <textarea class="form-control" placeholder="Добавить свой отзыв" id="review"></textarea>
                 <div class="input-group-append">
-                    <button class="btn btn-primary">Отправить</button>
+                    <button class="btn btn-primary" onclick="sendReview()">Отправить</button>
                 </div>
             </div>
             
@@ -70,6 +71,38 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const id = urlParams.get('id');
+
+        function sendReview() {
+            document.getElementById("error").innerHTML = "";
+
+            const visitDate = document.querySelector("input[name='visit_date']").value;
+            if (!document.querySelector("input[name='rating']:checked") || visitDate == "") {
+                document.getElementById("error").innerHTML = "Необходимо выбрать дату посещения и поставить оценку!";
+                return;
+            }
+            const rating = document.querySelector("input[name='rating']:checked").value;
+            const review = document.getElementById("review").value;
+
+            const data = {
+                visited_at: visitDate,
+                rating: rating,
+                review: review,
+                courtyard_id: id,
+                user_id: localStorage.user_id
+            };
+            console.log(data);
+
+            fetch(`http://localhost:8081/visits`, { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then((resp) => resp.json().then((body) => {
+                    console.log('answ', body);
+                }));
+        }
 
         window.onload = () => {
             // courtyard info
