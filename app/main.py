@@ -100,7 +100,7 @@ def get_courtyards(title: str = None, address: str = None, rating: str = None, l
 
 
 @app.post("/import")
-def import_data(data: dict, response: Response):
+def import_data(data: dict):
     db.begin()
     try:
         if 'users' in data:
@@ -132,7 +132,6 @@ def import_data(data: dict, response: Response):
         raise e
     db.commit()
 
-    response.status_code = 204
     return None
 
 
