@@ -46,7 +46,34 @@ function generateUserCard(username, last_name, first_name, patronymic, visited) 
                         <br>
                         <small class="text-danger">${visited} двора</small>
                     </span>
-                    <a href="#" class=""><span class="material-icons purple f-24">open_in_new</span></a>
+                    <a href="profile.html?id=321" class=""><span class="material-icons purple f-24">open_in_new</span></a>
                 </div>
+            </div>`
+}
+
+function generateVisitCard(title, address, rating, visited_at) {
+    rating = normalizeRating(rating);
+    return `<div class="list-group-item">
+                <a href="courtyard.html?id=123" class="link-dark">
+                    <h6 class="mb-1 link-dark" id="title">${title}</h6>
+                </a>
+                <p class="mb-0" id="rating">${address}</p>
+                <div class="d-flex justify-content-between">
+                    <p class="mb-0">★ <span id="rating">${rating}</span></p>
+                    <small class="text-muted">Посетил <span id="visited_at">${visited_at}</span></small>
+                </div>
+            </div>`
+}
+
+function generateReviewCard(username, last_name, first_name, patronymic, visited_at, rating, comment) { 
+    rating = normalizeRating(rating);
+    return `<div class="list-group-item">
+                <div class="d-flex justify-content-between">
+                    <h5 class="mb-1">
+                        ${username} <span class="text-black-50">aka ${last_name} ${first_name} ${patronymic}</span> <span class="text-warning">${rating} ★</span>
+                    </h5>
+                    <small>${visited_at}</small>
+                </div>
+                <p class="mb-1">${comment}</p>
             </div>`
 }
