@@ -43,7 +43,7 @@
                 
             </div>
 
-            <div class="row" id="courtyards-list">
+            <div class="row" id="found-courtyards-list">
                 
 
                 
@@ -61,7 +61,7 @@
 
             let card = addColumnClass(generateCourtyardCard(label, address, rating))
 
-            let list = document.getElementById("courtyards-list");
+            let list = document.getElementById("found-courtyards-list");
             for (let index = 0; index < 5; index++) {
                 list.innerHTML += card;
             }

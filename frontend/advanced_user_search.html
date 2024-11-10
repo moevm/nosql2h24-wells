@@ -38,7 +38,7 @@
                     </div>
                 </div>
             </form>
-            <div class="row" id="users-list">
+            <div class="row" id="found-users-list">
                 
 
 
@@ -57,7 +57,7 @@
             let visited = 123;
 
             let card = addColumnClass(generateUserCard(username, last_name, first_name, patronymic, visited))
-            let list = document.getElementById("users-list");
+            let list = document.getElementById("found-users-list");
             list.innerHTML += card;
         }
     </script>
