@@ -2,7 +2,8 @@
 function normalizeRating(rating) {
     let d1 = Math.floor(rating);
     let d2 = Math.floor((rating - d1)*10);
-    return ''+d1+','+d2;
+
+    return ''+d1 + (d2 == 0 ? '' : ','+d2);
 }
 
 function addClass(html_string, classname, selector='advanced-search-card') {
