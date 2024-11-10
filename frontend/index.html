@@ -48,10 +48,50 @@
         ymaps.ready(init);
 
         function init() {
+            // settings
             var myMap = new ymaps.Map ('map', {
                 center: [59.9342802, 30.3350986], // lat lon
                 zoom: 13
             });
+            myMap.controls
+                .add('mapTools')       // стандартные кнопки
+                .add('typeSelector')   // переключатель типа карты
+                .add('zoomControl');   // изменение масштаба
+            
+            // placemarks
+            let courtyard_id = 123;
+            let coordinates = [
+                [59.933, 30.333],
+                [59.933, 30.3350986],
+                [59.9342802, 30.3350986],
+                [59.9342802, 30.333]
+            ];
+            let mean_lat = 0;
+            let mean_lon = 0;
+            for (let i = 0; i < coordinates.length; i++) {
+                const latlon = coordinates[i];
+                mean_lat += coordinates[i][0];
+                mean_lon += coordinates[i][1];
+            }
+            mean_lat /= coordinates.length;
+            mean_lon /= coordinates.length;
+            let title = 'Двор-восьмиугольник';
+            var myPlacemark = new ymaps.Placemark([mean_lat, mean_lon], { 
+                iconContent: title,
+                id: courtyard_id
+            }, {
+                // Опции
+                preset: 'twirl#blueStretchyIcon' // иконка растягивается под контент
+            });
+            myPlacemark.events.add(['click'], function(e) {
+                window.location.assign('courtyard.html?id=' + e.get('target').properties._data.id);
+            });
+
+
+            var myPolygon = new ymaps.Polygon([coordinates]);
+            myMap.geoObjects.add(myPolygon);
+            myMap.geoObjects.add(myPlacemark);
+
         }
         // https://tokmakov.msk.ru/blog/item/16
 
