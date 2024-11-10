@@ -59,65 +59,90 @@
                 .add('zoomControl');   // изменение масштаба
             
             // placemarks
-            let courtyard_id = 123;
-            let coordinates = [
-                [59.933, 30.333],
-                [59.933, 30.3350986],
-                [59.9342802, 30.3350986],
-                [59.9342802, 30.333]
-            ];
-            let mean_lat = 0;
-            let mean_lon = 0;
-            for (let i = 0; i < coordinates.length; i++) {
-                const latlon = coordinates[i];
-                mean_lat += coordinates[i][0];
-                mean_lon += coordinates[i][1];
-            }
-            mean_lat /= coordinates.length;
-            mean_lon /= coordinates.length;
-            let title = 'Двор-восьмиугольник';
-            var myPlacemark = new ymaps.Placemark([mean_lat, mean_lon], { 
-                iconContent: title,
-                id: courtyard_id
-            }, {
-                // Опции
-                preset: 'twirl#blueStretchyIcon' // иконка растягивается под контент
-            });
-            myPlacemark.events.add(['click'], function(e) {
-                window.location.assign('courtyard.html?id=' + e.get('target').properties._data.id);
-            });
+            fetch('http://localhost:8081/courtyards', { 
+                // mode: 'no-cors', 
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then((resp) => resp.json().then((body) => {
+                    let list = document.getElementById("users-list");
+                    for (let index = 0; index < body.length; index++) {
+                        let data = body[index];
+                        console.log(data)
+                        
+                        let courtyard_id = data['id'];
+                        let title = data['title'];
+                        let address = data['houses'][0]["address"];
+                        let visited = data['visitors_count'];
+                        let rating = data["average_rating"];
 
+                        let cardc = generateCourtyardCard(title, address, rating, courtyard_id)
+                        let listc = document.getElementById("courtyards-list");
+                        listc.innerHTML += cardc;
+                        
+                        
+                        let coordinates = [];
+                        for (let i = 0; i < data['coordinates'].length; i++) {
+                            const coord = data['coordinates'][i];
+                            coordinates.push([coord['latitude'], coord['longitude']]);
+                        }
+                        console.log(coordinates);
 
-            var myPolygon = new ymaps.Polygon([coordinates]);
-            myMap.geoObjects.add(myPolygon);
-            myMap.geoObjects.add(myPlacemark);
+                        let mean_lat = 0;
+                        let mean_lon = 0;
+                        for (let i = 0; i < coordinates.length; i++) {
+                            const latlon = coordinates[i];
+                            mean_lat += coordinates[i][0];
+                            mean_lon += coordinates[i][1];
+                        }
+                        mean_lat /= coordinates.length;
+                        mean_lon /= coordinates.length;
+                        
+                        var myPlacemark = new ymaps.Placemark([mean_lat, mean_lon], { 
+                            iconContent: title,
+                            id: courtyard_id
+                        }, {
+                            // Опции
+                            preset: 'twirl#blueStretchyIcon' // иконка растягивается под контент
+                        });
+                        myPlacemark.events.add(['click'], function(e) {
+                            window.location.assign('courtyard.html?id=' + e.get('target').properties._data.id);
+                        });
 
+                        var myPolygon = new ymaps.Polygon([coordinates]);
+                        myMap.geoObjects.add(myPolygon);
+                        myMap.geoObjects.add(myPlacemark);
+                    }
+                })); 
         }
         // https://tokmakov.msk.ru/blog/item/16
 
         window.onload = () => {
-            let username = "ivanovii";
-            let last_name = "Иванов";
-            let first_name = "Иван";
-            let patronymic = "Иванович";
-            let visited = 123;
+            fetch('http://localhost:8081/users?limit=10', { 
+                // mode: 'no-cors', 
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then((resp) => resp.json().then((body) => {
+                    let list = document.getElementById("users-list");
+                    for (let index = 0; index < body.length; index++) {
+                        let data = body[index];
+                        let username = data['nickname'];
+                        let last_name = data['last_name'];
+                        let first_name = data['first_name'];
+                        let patronymic = data['patronymic'];
+                        let visited = data['visited_courtyards'];
 
-            let card = generateUserCard(username, last_name, first_name, patronymic, visited)
-            let list = document.getElementById("users-list");
-            for (let index = 0; index < 120; index++) {
-                list.innerHTML += card;
-            }
+                        let card = generateUserCard(username, last_name, first_name, patronymic, visited)
+                        list.innerHTML += card;
+                    }
+                })); 
             // -----
-            let address = "Рылеева, 22";
-            let label = "Двор-восьмиугольник";
-            let rating = 4.7;
-
-            let cardc = generateCourtyardCard(label, address, rating)
-            let listc = document.getElementById("courtyards-list");
-            for (let index = 0; index < 120; index++) {
-                listc.innerHTML += cardc;
-            }
-            console.log("aa");
+            
         }
     </script>
 </body>

@@ -21,7 +21,7 @@ function addColumnClass(card) {
     return addClass(card, 'col-md-6');
 }
 
-function generateCourtyardCard(title, address, rating) {
+function generateCourtyardCard(title, address, rating, id) {
     rating = normalizeRating(rating);
     return `<div class="mb-3 advanced-search-card">
                 <div class="list-group-item">
@@ -31,7 +31,7 @@ function generateCourtyardCard(title, address, rating) {
                             <p class="mb-0 text-muted">${address}</p>
                             <small class="text-warning">★ ${rating}</small>
                         </div>
-                        <a href="courtyard.html?id=123" class=""><span class="material-icons purple f-24">open_in_new</span></a>
+                        <a href="courtyard.html?id=${id}" class=""><span class="material-icons purple f-24">open_in_new</span></a>
                     </div>
                 </div>
             </div>`
