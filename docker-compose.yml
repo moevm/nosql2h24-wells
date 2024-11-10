@@ -6,9 +6,6 @@ services:
     container_name: neo4j
     environment:
       - NEO4J_AUTH=neo4j/password
-    ports:
-      - "127.0.0.1:7687:7687" # DELETE ME
-      - "127.0.0.1:7474:7474"
     healthcheck:
       test: "wget http://localhost:7474 || exit 1"
       interval: 10s

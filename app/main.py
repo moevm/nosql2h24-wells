@@ -1,3 +1,5 @@
+import sys
+
 from fastapi import FastAPI, Request, Response, HTTPException
 
 from app.database import db
@@ -132,6 +134,25 @@ def import_data(data: dict, response: Response):
 
     response.status_code = 204
     return None
+
+
+@app.get("/export")
+def export_data():
+    result = {
+        'users': search_users(limit=sys.maxsize),
+        'courtyards': search_courtyards(limit=sys.maxsize),
+        'visits': [],
+    }
+    visits = search_visits(limit=sys.maxsize)
+    for visit in visits:
+        result['visits'].append({
+            "username": visit['user']['nickname'],
+            "courtyard_title": visit['courtyard']['title'],
+            "visited_at": visit['visited_at'],
+            "rating": visit['rating'],
+            "comment": visit['comment'],
+        })
+    return result
 
 
 def initialize_demo_data():
