@@ -4,14 +4,15 @@ from app.database import db
 import bcrypt
 
 
-def get_user_by_nickname(nickname: str):
+def get_user_by_nickname(nickname: str, with_password: bool = False):
     result = db.query(
-        """
+        f"""
         MATCH (u:User)
         WHERE u.nickname = $nickname
         OPTIONAL MATCH (u)-[:VISITED]->(c:Courtyard)
         RETURN elementId(u) AS id, u.nickname AS nickname, u.first_name AS first_name, u.last_name AS last_name, 
             u.patronymic AS patronymic, u.avatar_url AS avatar_url, u.created_at AS created_at,
+            {"u.password AS password," if with_password else ""}
             count(DISTINCT c) AS visits_count
         """,
         {"nickname": nickname}
@@ -25,7 +26,7 @@ def authenticate_user(nickname, password):
     if not nickname or not password:
         raise HTTPException(status_code=400, detail="Nickname and password are required")
 
-    user = get_user_by_nickname(nickname)
+    user = get_user_by_nickname(nickname, with_password=True)
 
     if not user:
         return None
@@ -133,6 +134,8 @@ def validate_visit(visit: dict) -> dict:
 
     if 'comment' not in visit:
         visit['comment'] = ''
+
+    visit['rating'] = int(visit['rating'])
 
     return visit
 
