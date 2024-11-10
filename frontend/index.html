@@ -15,7 +15,7 @@
 
                 <section id="courtyards" class="h-60">
                     <div class="search mb-3 d-flex align-items-center">
-                        <input type="text" class="form-control mr-2" placeholder="Поиск по дворам">
+                        <input type="text" class="form-control mr-2" placeholder="Поиск по дворам" oninput="filterCourtyards(this.value)">
                         <a class="btn btn-primary" href="advanced_courtyard_search.html">
                             <span class="material-icons">settings</span>
                         </a>
@@ -26,7 +26,7 @@
                 </section>
                 <section id="users" class="h-40">
                     <div class="search my-3 d-flex align-items-center">
-                        <input type="text" class="form-control mr-2" placeholder="Поиск по пользователям">
+                        <input type="text" class="form-control mr-2" placeholder="Поиск по пользователям" oninput="filterUsers(this.value)">
                         <a class="btn btn-primary" href="advanced_user_search.html">
                             <span class="material-icons">settings</span>
                         </a>
@@ -46,14 +46,73 @@
     <script src="scripts/templates.js"></script>
     <script>
         ymaps.ready(init);
+        let map = undefined;
+        let collection = undefined;
+
+        function updateCourtyards(courtyards) {
+            collection.removeAll();
+            let list = document.getElementById("courtyards-list");
+            list.innerHTML = "";
+
+            for (let index = 0; index < courtyards.length; index++) {
+                let data = courtyards[index];
+                
+                let courtyard_id = data['id'];
+                let title = data['title'];
+                let address = data['houses']
+                    .map(element => element["address"])
+                    .reduce((a, b) => a + "; " + b);
+                let visited = data['visitors_count'];
+                let rating = data["average_rating"];
+
+                let cardc = generateCourtyardCard(title, address, rating, courtyard_id)
+                let listc = document.getElementById("courtyards-list");
+                listc.innerHTML += cardc;
+                
+                
+                let coordinates = [];
+                for (let i = 0; i < data['coordinates'].length; i++) {
+                    const coord = data['coordinates'][i];
+                    coordinates.push([coord['latitude'], coord['longitude']]);
+                }
+
+                let mean_lat = 0;
+                let mean_lon = 0;
+                for (let i = 0; i < coordinates.length; i++) {
+                    const latlon = coordinates[i];
+                    mean_lat += coordinates[i][0];
+                    mean_lon += coordinates[i][1];
+                }
+                mean_lat /= coordinates.length;
+                mean_lon /= coordinates.length;
+                
+                var myPlacemark = new ymaps.Placemark([mean_lat, mean_lon], { 
+                    id: courtyard_id, 
+                    iconContent: title,
+                    hintContent: `Адрес: ${address}\n<br>Посетили: ${visited}<br>Рейтинг: ★${rating}`
+                }, {
+                    preset: 'twirl#blueStretchyIcon' // иконка растягивается под контент
+                });
+                myPlacemark.events.add(['click'], function(e) {
+                    window.location.assign('courtyard.html?id=' + e.get('target').properties._data.id);
+                });
+
+                var myPolygon = new ymaps.Polygon([coordinates]);
+                collection.add(myPolygon);
+                collection.add(myPlacemark);
+            }
+            map.geoObjects.add(collection);
+        }
+
 
         function init() {
             // settings
-            var myMap = new ymaps.Map ('map', {
+            collection = new ymaps.GeoObjectCollection();
+            map = new ymaps.Map ('map', {
                 center: [59.9342802, 30.3350986], // lat lon
                 zoom: 13
             });
-            myMap.controls
+            map.controls
                 .add('mapTools')       // стандартные кнопки
                 .add('typeSelector')   // переключатель типа карты
                 .add('zoomControl');   // изменение масштаба
@@ -67,57 +126,22 @@
                 }
             })
                 .then((resp) => resp.json().then((body) => {
-                    let list = document.getElementById("users-list");
-                    for (let index = 0; index < body.length; index++) {
-                        let data = body[index];
-                        console.log(data)
-                        
-                        let courtyard_id = data['id'];
-                        let title = data['title'];
-                        let address = data['houses'][0]["address"];
-                        let visited = data['visitors_count'];
-                        let rating = data["average_rating"];
-
-                        let cardc = generateCourtyardCard(title, address, rating, courtyard_id)
-                        let listc = document.getElementById("courtyards-list");
-                        listc.innerHTML += cardc;
-                        
-                        
-                        let coordinates = [];
-                        for (let i = 0; i < data['coordinates'].length; i++) {
-                            const coord = data['coordinates'][i];
-                            coordinates.push([coord['latitude'], coord['longitude']]);
-                        }
-                        console.log(coordinates);
-
-                        let mean_lat = 0;
-                        let mean_lon = 0;
-                        for (let i = 0; i < coordinates.length; i++) {
-                            const latlon = coordinates[i];
-                            mean_lat += coordinates[i][0];
-                            mean_lon += coordinates[i][1];
-                        }
-                        mean_lat /= coordinates.length;
-                        mean_lon /= coordinates.length;
-                        
-                        var myPlacemark = new ymaps.Placemark([mean_lat, mean_lon], { 
-                            iconContent: title,
-                            id: courtyard_id
-                        }, {
-                            // Опции
-                            preset: 'twirl#blueStretchyIcon' // иконка растягивается под контент
-                        });
-                        myPlacemark.events.add(['click'], function(e) {
-                            window.location.assign('courtyard.html?id=' + e.get('target').properties._data.id);
-                        });
-
-                        var myPolygon = new ymaps.Polygon([coordinates]);
-                        myMap.geoObjects.add(myPolygon);
-                        myMap.geoObjects.add(myPlacemark);
-                    }
+                    updateCourtyards(body)
                 })); 
         }
         // https://tokmakov.msk.ru/blog/item/16
+        function updateUsers(users) {
+            let list = document.getElementById("users-list");
+            list.innerHTML = "";
+            users.forEach(user => {
+                let username = user['nickname'];
+                let last_name = user['last_name'];
+                let first_name = user['first_name'];
+                let patronymic = user['patronymic'];
+                let visited = user['visited_courtyards'];
+                list.innerHTML += generateUserCard(username, last_name, first_name, patronymic, visited, user.id);
+            });
+        }
 
         window.onload = () => {
             fetch('http://localhost:8081/users?limit=10', { 
@@ -127,22 +151,43 @@
                     'Content-Type': 'application/json'
                 }
             })
-                .then((resp) => resp.json().then((body) => {
-                    let list = document.getElementById("users-list");
-                    for (let index = 0; index < body.length; index++) {
-                        let data = body[index];
-                        let username = data['nickname'];
-                        let last_name = data['last_name'];
-                        let first_name = data['first_name'];
-                        let patronymic = data['patronymic'];
-                        let visited = data['visited_courtyards'];
+                .then((resp) => resp.json().then((body) => 
+                    updateUsers(body)
+                )); 
+        }
 
-                        let card = generateUserCard(username, last_name, first_name, patronymic, visited)
-                        list.innerHTML += card;
-                    }
-                })); 
-            // -----
-            
+        function filterUsers(query) {
+            fetch(`http://localhost:8081/users?nickname=${query}`, { 
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(`Results for ${query}:`, data);
+                    updateUsers(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+
+        function filterCourtyards(query) {
+            fetch(`http://localhost:8081/courtyards?title=${query}`, { 
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(`Results for ${query}:`, data);
+                    updateCourtyards(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
         }
     </script>
 </body>
