@@ -101,3 +101,11 @@ a:has(.material-icons) {
 .f-24 {
     transform: scale(2);
 }
+
+
+/* PROFILE */
+
+.card {
+    background: #E5E5E5;
+    border-radius: 12px;
+}
