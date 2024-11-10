@@ -104,6 +104,18 @@
             map.geoObjects.add(collection);
         }
 
+        function updateUsers(users) {
+            let list = document.getElementById("users-list");
+            list.innerHTML = "";
+            users.forEach(user => {
+                let username = user['nickname'];
+                let last_name = user['last_name'];
+                let first_name = user['first_name'];
+                let patronymic = user['patronymic'];
+                let visited = user['visited_courtyards'];
+                list.innerHTML += generateUserCard(username, last_name, first_name, patronymic, visited, user.id);
+            });
+        }
 
         function init() {
             // settings
@@ -128,19 +140,6 @@
                 .then((resp) => resp.json().then((body) => {
                     updateCourtyards(body)
                 })); 
-        }
-        // https://tokmakov.msk.ru/blog/item/16
-        function updateUsers(users) {
-            let list = document.getElementById("users-list");
-            list.innerHTML = "";
-            users.forEach(user => {
-                let username = user['nickname'];
-                let last_name = user['last_name'];
-                let first_name = user['first_name'];
-                let patronymic = user['patronymic'];
-                let visited = user['visited_courtyards'];
-                list.innerHTML += generateUserCard(username, last_name, first_name, patronymic, visited, user.id);
-            });
         }
 
         window.onload = () => {
