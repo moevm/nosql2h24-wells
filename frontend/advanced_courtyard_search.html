@@ -14,30 +14,34 @@
             <h2 class="header py-2">Расширенный поиск дворов</h2>
         </div>
         <div class="content p-4">
-            <form class="mb-4">
+            <div class="mb-4">
                 <div class="form-row mb-3">
                     <div class="col">
-                        <input type="text" class="form-control" placeholder="Адрес">
+                        <input name="address" type="text" class="form-control" placeholder="Адрес">
                     </div>
                     <div class="col">
-                        <input type="text" class="form-control" placeholder="Название">
+                        <input name="title" type="text" class="form-control" placeholder="Название">
                     </div>
-                    <div class="col">
-                        <input type="text" class="form-control" placeholder="Рейтинг">
+                    <div class="col doubled">
+                        <input name="rating_min" type="number" min="1" max="5" class="form-control" placeholder="Рейтинг, от">
+                        <input name="rating_max" type="number" min="1" max="5" class="form-control" placeholder="Рейтинг, до">
                     </div>
+                    
                 </div>
                 <div class="form-row">
-                    <div class="col">
-                        <input type="text" class="form-control" placeholder="Долгота">
+                    <div class="col doubled">
+                        <input name="longitude_min" type="number" class="form-control" placeholder="Долгота, от">
+                        <input name="longitude_max" type="number" class="form-control" placeholder="Долгота, до">
+                    </div>
+                    <div class="col doubled">
+                        <input name="latitude_min" type="number" class="form-control" placeholder="Широта, от">
+                        <input name="latitude_max" type="number" class="form-control" placeholder="Широта, до">
                     </div>
                     <div class="col">
-                        <input type="text" class="form-control" placeholder="Широта">
-                    </div>
-                    <div class="col">
-                        <button type="submit" class="btn btn-primary btn-block">Найти</button>
+                        <button type="submit" class="btn btn-primary btn-block" onclick="findCourtyards()">Найти</button>
                     </div>
                 </div>
-            </form>
+            </div>
 
             <div class="list-group">
                 
@@ -54,18 +58,52 @@
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script src="scripts/templates.js"></script>
     <script>
-        window.onload = () => {
-            let address = "Рылеева, 22";
-            let label = "Двор-восьмиугольник";
-            let rating = 4.7;
+        function findCourtyards() {
+            const address = document.querySelector("input[name='address']").value;
+            const title = document.querySelector("input[name='title']").value;
 
-            let card = addColumnClass(generateCourtyardCard(label, address, rating))
+            const rating_min = document.querySelector("input[name='rating_min']").value;
+            const rating_max = document.querySelector("input[name='rating_max']").value;
 
+            const latitude_min = document.querySelector("input[name='latitude_min']").value;
+            const latitude_max = document.querySelector("input[name='latitude_max']").value;
+            
+            const longitude_min = document.querySelector("input[name='longitude_min']").value;
+            const longitude_max = document.querySelector("input[name='longitude_max']").value;
+
+            const data = {
+                address: address,
+                title: title,
+                rating_min: rating_min,
+                latitude_min: latitude_min,
+                latitude_max: latitude_max,
+                longitude_min: longitude_min,
+                longitude_max: longitude_max
+            };
+            console.log(data);
             let list = document.getElementById("found-courtyards-list");
-            for (let index = 0; index < 5; index++) {
-                list.innerHTML += card;
-            }
-            console.log("aa");
+
+            fetch(`http://localhost:8081/courtyards?` + new URLSearchParams(data).toString(), { 
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then((resp) => resp.json().then((body) => {
+                    if (body.length === 0) {
+                        list.innerHTML = "<p>Ничего не найдено</p>";
+                        return;
+                    }
+                    list.innerHTML = "";
+                    body.forEach(courtyard => 
+                        list.innerHTML += addColumnClass(
+                            generateCourtyardCard(
+                                courtyard.title, collapseHouses(courtyard.houses), courtyard.average_rating, courtyard.id
+                            )
+                        )
+                    );
+                    
+                }));
         }
     </script>
 </body>

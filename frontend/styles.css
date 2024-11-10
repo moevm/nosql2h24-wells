@@ -102,6 +102,10 @@ a:has(.material-icons) {
     transform: scale(2);
 }
 
+.doubled input {
+    width: calc(50% - 4px);
+    display: inline-block;
+}
 
 /* PROFILE */
 

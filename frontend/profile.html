@@ -29,10 +29,10 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Посещённые дворы</h5>
-                        <input type="text" class="form-control mb-3" placeholder="Поиск по дворам">
+                        <input type="text" class="form-control mb-3" placeholder="Поиск по дворам" name="courtyard" oninput="filterVisits()">
                         <div class="d-flex mb-3">
-                            <input class="form-control mr-2" type="date" name="start_date">
-                            <input class="form-control" type="date" name="end_date">
+                            <input class="form-control mr-2" type="date" name="start_date" oninput="filterVisits()">
+                            <input class="form-control" type="date" name="end_date" oninput="filterVisits()">
                         </div>
                         <div class="list-group" id="visits">
                             
@@ -52,6 +52,29 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const id = urlParams.get('id');
+
+        function filterVisits() {
+            const startDate = document.querySelector("input[name='start_date']").value;
+            const endDate = document.querySelector("input[name='end_date']").value;
+            const courtyard = document.querySelector("input[name='courtyard']").value;
+
+            // visits
+            fetch(`http://localhost:8081/users/${id}/visits`, { 
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then((resp) => resp.json().then((body) => {
+                    for(let i = 0; i < body.length; i++) {
+                        let review = body[i];
+                        let courtyard = review.courtyard;
+                        let card = generateVisitCard(
+                            courtyard.title, courtyard.houses, courtyard.average_rating, review.visited_at, courtyard.id);
+                        document.getElementById("visits").innerHTML += card;
+                    }
+                }));
+        }
 
         window.onload = () => {
             // user info

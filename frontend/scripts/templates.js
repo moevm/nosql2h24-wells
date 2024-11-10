@@ -26,6 +26,12 @@ function timestampToDate(timestamp) {
     return date.toLocaleDateString();
 }
 
+function collapseHouses(houses) {
+    return houses
+        .map(element => element["address"])
+        .reduce((a, b) => a + "; " + b)
+}
+
 function generateCourtyardCard(title, address, rating, id) {
     rating = normalizeRating(rating);
     return `<div class="mb-3 advanced-search-card">
