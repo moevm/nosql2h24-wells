@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль пользователя</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="row">
+            <!-- User Profile Section -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <img src="https://via.placeholder.com/150" alt="Avatar" class="rounded-circle mb-3">
+                        <h5 id="username">username</h5>
+                        <p id="full_name">FIO</p>
+                        <p>Дворов посещено: <span class="text-success" id="visited">N</span></p>
+                        <p>На сайте с <span id="reegistration_date">01.01.1970
+                        </span></p>
+                    </div>
+                </div>
+            </div>
+            <!-- Visited Yards Section -->
+            <div class="col-md-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Посещённые дворы</h5>
+                        <input type="text" class="form-control mb-3" placeholder="Поиск по дворам">
+                        <div class="d-flex mb-3">
+                            <input class="form-control mr-2" type="date" name="start_date">
+                            <input class="form-control" type="date" name="end_date">
+                        </div>
+                        <div class="list-group" id="visits">
+                            
+                            
+                            <!-- More visited yards if needed -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="scripts/templates.js"></script>
+    <script>
+        window.onload = () => {
+            // info
+            let username = "ivanovii";
+            let full_name = "Иванов Иван Иванович";
+            let visited = 17;
+            let reegistration_date = "01.01.2024";
+            document.getElementById("username").innerHTML = username;
+            document.getElementById("full_name").innerHTML = full_name;
+            document.getElementById("visited").innerHTML = visited;
+            document.getElementById("reegistration_date").innerHTML = reegistration_date;
+
+            // visits
+            let address = "Рылеева, 22";
+            let label = "Двор-восьмиугольник";
+            let rating = 4.7;
+            let visited_at = "01.01.2024";
+
+            let card = generateVisitCard(label, address, rating, visited_at);
+            let list = document.getElementById("visits");
+            for (let index = 0; index < 12; index++) {
+                list.innerHTML += card;
+            }
+            console.log("aa");
+        }
+    </script>
+</body>
+</html>
