@@ -17,13 +17,9 @@
                 <div class="card">
         
                     <div class="card-body text-center">
-                        <div class="position-relative">
+                        <div class="position-relative" id="user-image">
                             <img id="avatar_url" src="https://via.placeholder.com/150" alt="Avatar" class="rounded-circle mb-3 h-100 w-100">
-                            <a href="edit_profile.html" style="color:black">
-                                <span class="position-absolute translate-middle badge rounded-pill" style="bottom: 10%; right: 10%; transform: scale(1.5); background-color: lightgray;">
-                                    <span class="material-icons">edit</span>
-                                </span> 
-                            </a>
+                            
                         </div>
 
                         <h5 id="username">username</h5>
@@ -96,6 +92,13 @@
         }
 
         window.onload = () => {
+            if (id == localStorage.user_id)
+                document.getElementById("user-image").innerHTML += `<a href="edit_profile.html" style="color:black">
+                                <span class="position-absolute translate-middle badge rounded-pill" style="bottom: 10%; right: 10%; transform: scale(1.5); background-color: lightgray;">
+                                    <span class="material-icons">edit</span>
+                                </span> 
+                            </a>`
+
             // user info
             fetch(`http://localhost:8081/users/${id}`, {
                 method: 'GET',
