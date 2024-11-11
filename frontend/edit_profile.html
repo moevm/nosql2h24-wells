@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактирование профиля</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f8f9fa;
+        }
+        .profile-container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .save-btn {
+            width: 100%;
+            background-color: #1a73e8;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <h3 class="text-center mb-4">Редактирование профиля</h3>
+        <form>
+            <div class="form-group">
+                <label for="nickname">Никнейм</label>
+                <input type="text" class="form-control" id="nickname" value="It's your profile" required>
+            </div>
+            <div class="form-group">
+                <label for="surname">Фамилия</label>
+                <input type="text" class="form-control" id="surname" value="ТЫков" required>
+            </div>
+            <div class="form-group">
+                <label for="name">Имя</label>
+                <input type="text" class="form-control" id="name" value="Ты" required>
+            </div>
+            <div class="form-group">
+                <label for="patronymic">Отчество</label>
+                <input type="text" class="form-control" id="patronymic" value="ТЫкович">
+            </div>
+            <div class="form-group">
+                <label for="photoUrl">URL фотографии</label>
+                <input type="url" class="form-control" id="photoUrl" value="https://www.youtube.com/watch?v=xvFZjo5PgG0">
+            </div>
+            <button type="submit" class="btn save-btn">Сохранить</button>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
