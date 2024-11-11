@@ -177,18 +177,19 @@ def initialize_demo_data():
         return
 
     def create_coordinates(longitude: float, latitude: float):
-        r = 0.0005
+        r = 0.0002
         coords = []
         for i in range(8):
             coords.append({
-                "longitude": longitude + r * math.cos(i * math.pi / 4),
-                "latitude": latitude + r * math.sin(i * math.pi / 4)
+                "longitude": longitude + r * math.sin(i * math.pi / 4),
+                "latitude": latitude + r * math.cos(i * math.pi / 4)
             })
         return coords
 
     print("Инициализация демонстрационных данных...")
-    coord1 = create_coordinates(longitude=30.3550986, latitude=59.9342802)
-    coord2 = create_coordinates(longitude=30.3450986, latitude=59.9442802)
+    coord1 = create_coordinates(longitude=30.283151, latitude=59.916766)
+    coord2 = create_coordinates(longitude=30.290646, latitude=59.953568)
+    coord3 = create_coordinates(longitude=30.307252, latitude=59.963390)
     demo_data = {
         'users': [
             {
@@ -218,36 +219,48 @@ def initialize_demo_data():
         ],
         'courtyards': [
             {
-                "title": "Двор 1",
-                "houses": ["ул. Пушкина, 10", "ул. Пушкина, 12"],
+                "title": "Двор дома-утюга",
+                "houses": ["наб. реки Фонтанки, д. 199", "Садовая ул., д. 128"],
                 "coordinates": coord1
             },
             {
-                "title": "Двор 2",
-                "houses": ["ул. Ленина, 15", "ул. Ленина, 17"],
+                "title": "Двор-восьмиугольник",
+                "houses": ["Малый просп. П. С., д. 1б"],
                 "coordinates": coord2
+            },
+            {
+                "title": "Бармалеева, 4",
+                "houses": ["Бармалеева, 4"],
+                "coordinates": coord3
             }
         ],
         'visits': [
             {
                 'username': 'ivanov',
-                'courtyard_title': 'Двор 1',
+                'courtyard_title': 'Двор дома-утюга',
                 'visited_at': '2024-11-08',
                 'rating': 5,
                 'comment': 'Отличный двор!',
             },
             {
                 'username': 'ivanov',
-                'courtyard_title': 'Двор 2',
+                'courtyard_title': 'Двор-восьмиугольник',
                 'visited_at': "2024-11-09",
                 'rating': 3,
                 'comment': 'Двор так себе, видел и лучше.',
             },
             {
                 'username': 'petrov',
-                'courtyard_title': 'Двор 2',
+                'courtyard_title': 'Двор-восьмиугольник',
                 'visited_at': "2024-11-09",
                 'rating': 4,
+            },
+            {
+                'username': 'ivanov',
+                'courtyard_title': 'Бармалеева, 4',
+                'visited_at': "2024-11-11",
+                'rating': 5,
+                'comment': 'Крайне советую это место, было очень интересно здесь побывать'
             }
         ]
     }
