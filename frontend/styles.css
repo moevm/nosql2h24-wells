@@ -18,8 +18,32 @@ body, html {
     display: inline-block;
 }
 
-a:has(.material-icons) {
+.btn-search {
     height: calc(1.5em + .75rem + 2px)
+}
+
+.floating-btn {
+    position: fixed;
+    z-index: 1;
+    right: 20px;
+    border-radius: 50%;
+    background-color: #2F2AB7;
+    height: 48px;
+    width: 48px;
+    align-items: center;
+    justify-content: center;
+}
+
+.bottom {
+    bottom: 20px;
+}
+
+.top {
+    top: 20px;
+}
+
+.btn-icon {
+    transform: scale(2) translate(25%, 25%);
 }
 
 /* lists */

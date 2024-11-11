@@ -12,10 +12,20 @@
     <div class="container mt-4">
         <div class="row">
             <!-- User Profile Section -->
+             
             <div class="col-md-4 mb-4">
                 <div class="card">
+        
                     <div class="card-body text-center">
-                        <img id="avatar_url" src="https://via.placeholder.com/150" alt="Avatar" class="rounded-circle mb-3 h-100 w-100">
+                        <div class="position-relative">
+                            <img id="avatar_url" src="https://via.placeholder.com/150" alt="Avatar" class="rounded-circle mb-3 h-100 w-100">
+                            <a href="edit_profile.html" style="color:black">
+                                <span class="position-absolute translate-middle badge rounded-pill" style="bottom: 10%; right: 10%; transform: scale(1.5); background-color: lightgray;">
+                                    <span class="material-icons">edit</span>
+                                </span> 
+                            </a>
+                        </div>
+
                         <h5 id="username">username</h5>
                         <p id="full_name">FIO</p>
                         <p>Дворов посещено: <span class="text-success" id="visited">N</span></p>
