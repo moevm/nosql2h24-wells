@@ -15,11 +15,11 @@
             <div class="col-md-4 mb-4">
                 <div class="card">
                     <div class="card-body text-center">
-                        <img src="https://via.placeholder.com/150" alt="Avatar" class="rounded-circle mb-3">
+                        <img id="avatar_url" src="https://via.placeholder.com/150" alt="Avatar" class="rounded-circle mb-3 h-100 w-100">
                         <h5 id="username">username</h5>
                         <p id="full_name">FIO</p>
                         <p>Дворов посещено: <span class="text-success" id="visited">N</span></p>
-                        <p>На сайте с <span id="reegistration_date">01.01.1970
+                        <p>На сайте с <span id="registration_date">01.01.1970
                         </span></p>
                     </div>
                 </div>
@@ -97,7 +97,8 @@
                     document.getElementById("username").innerHTML = body["nickname"];
                     document.getElementById("full_name").innerHTML = `${body["last_name"]} ${body["first_name"]} ${body["patronymic"]}`;
                     document.getElementById("visited").innerHTML = body["visits_count"];
-                    document.getElementById("reegistration_date").innerHTML = timestampToDate(body["created_at"]);
+                    document.getElementById("registration_date").innerHTML = timestampToDate(body["created_at"]);
+                    document.getElementById("avatar_url").src = body["avatar_url"];
                 }));
             
 
