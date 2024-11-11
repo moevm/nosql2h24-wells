@@ -58,19 +58,28 @@
             const endDate = document.querySelector("input[name='end_date']").value;
             const courtyard = document.querySelector("input[name='courtyard']").value;
 
+            const data = {
+                visited_from: startDate,
+                visited_to: endDate,
+                courtyard_title: courtyard
+            };
+
             // visits
-            fetch(`http://localhost:8081/users/${id}/visits`, { 
+            fetch(`http://localhost:8081/users/${id}/visits?` + new URLSearchParams(data).toString(), { 
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })
                 .then((resp) => resp.json().then((body) => {
+                    document.getElementById("visits").innerHTML = "";
                     for(let i = 0; i < body.length; i++) {
                         let review = body[i];
                         let courtyard = review.courtyard;
                         let card = generateVisitCard(
-                            courtyard.title, courtyard.houses, courtyard.average_rating, review.visited_at, courtyard.id);
+                            courtyard.title, courtyard.houses, courtyard.average_rating, 
+                            review.visited_at, courtyard.id
+                        );
                         document.getElementById("visits").innerHTML += card;
                     }
                 }));
