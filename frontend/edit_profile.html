@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Редактирование профиля</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel=stylesheet href=styles.css>
     <style>
         body {
             display: flex;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background-color: #f8f9fa;
         }
         .profile-container {
             width: 100%;
@@ -32,32 +32,85 @@
 <body>
     <div class="profile-container">
         <h3 class="text-center mb-4">Редактирование профиля</h3>
-        <form>
+        <div>
             <div class="form-group">
                 <label for="nickname">Никнейм</label>
-                <input type="text" class="form-control" id="nickname" value="It's your profile" required>
+                <input type="text" class="form-control" name="nickname" required>
             </div>
             <div class="form-group">
-                <label for="surname">Фамилия</label>
-                <input type="text" class="form-control" id="surname" value="ТЫков" required>
+                <label for="last_name">Фамилия</label>
+                <input type="text" class="form-control" name="last_name">
             </div>
             <div class="form-group">
-                <label for="name">Имя</label>
-                <input type="text" class="form-control" id="name" value="Ты" required>
+                <label for="first_name">Имя</label>
+                <input type="text" class="form-control" name="first_name">
             </div>
             <div class="form-group">
                 <label for="patronymic">Отчество</label>
-                <input type="text" class="form-control" id="patronymic" value="ТЫкович">
+                <input type="text" class="form-control" name="patronymic">
             </div>
             <div class="form-group">
-                <label for="photoUrl">URL фотографии</label>
-                <input type="url" class="form-control" id="photoUrl" value="https://www.youtube.com/watch?v=xvFZjo5PgG0">
+                <label for="avatar_url">URL фотографии</label>
+                <input type="url" class="form-control" name="avatar_url">
             </div>
-            <button type="submit" class="btn save-btn">Сохранить</button>
-        </form>
+            <button type="submit" class="btn save-btn" onclick="save()">Сохранить</button>
+        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        const id = localStorage.user_id;
+        window.onload = () => {
+            fetch(`http://localhost:8081/users/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then((resp) => resp.json().then((body) => {
+                    document.querySelector("input[name='nickname']").value = body["nickname"];
+                    document.querySelector("input[name='first_name']").value = body["first_name"];
+                    document.querySelector("input[name='last_name']").value = body["last_name"];
+                    document.querySelector("input[name='patronymic']").value = body["patronymic"];
+                    document.querySelector("input[name='avatar_url']").value = body["avatar_url"];
+                }));
+        }
+
+        function save() {
+            const nickname = document.querySelector("input[name='nickname']").value;
+            if (nickname == '') {
+                alert("Никнейм не может быть пустым");
+                return;
+            }
+            const first_name = document.querySelector("input[name='first_name']").value;
+            const last_name = document.querySelector("input[name='last_name']").value;
+            const patronymic = document.querySelector("input[name='patronymic']").value;
+            const avatar_url = document.querySelector("input[name='avatar_url']").value;
+            const data = {
+                nickname: nickname,
+                first_name: first_name,
+                last_name: last_name,
+                patronymic: patronymic,
+                avatar_url: avatar_url
+            };
+
+            fetch(`http://localhost:8081/users/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then((resp) => resp.json().then((body) => {
+                    if ("details" in data) {
+                        alert(body["details"]);
+                        return;
+                    }
+                    alert("Профиль успешно обновлен");
+                    window.location.href = `profile.html?id=${id}`;
+                }));
+        }
+    </script>
 </body>
 </html>
