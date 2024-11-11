@@ -48,7 +48,7 @@
                 </div>
             </div>
             <div class="input-group mb-4">
-                <textarea class="form-control" placeholder="Добавить свой отзыв" id="review"></textarea>
+                <textarea class="form-control" placeholder="Добавить свой отзыв" id="comment"></textarea>
                 <div class="input-group-append">
                     <button class="btn btn-primary" onclick="sendReview()">Отправить</button>
                 </div>
@@ -81,12 +81,12 @@
                 return;
             }
             const rating = document.querySelector("input[name='rating']:checked").value;
-            const review = document.getElementById("review").value;
+            const comment = document.getElementById("comment").value;
 
             const data = {
                 visited_at: visitDate,
                 rating: parseInt(rating),
-                review: review,
+                comment: comment,
                 courtyard_id: id,
                 user_id: localStorage.user_id
             };
@@ -99,9 +99,13 @@
                 },
                 body: JSON.stringify(data)
             })
-                .then((resp) => resp.json().then((body) => {
-                    console.log('answ', body);
-                }));
+                .then((resp) => {
+                    if (resp.ok) {
+                        updateReviews();
+                    } else {
+                        document.getElementById("error").innerHTML = "Ошибка при добавлении отзыва!";
+                    }
+                });
         }
 
         window.onload = () => {
@@ -114,7 +118,7 @@
                 }
             })
                 .then((resp) => resp.json().then((body) => {
-                    document.getElementById("mean_rating").innerHTML = body['average_rating'];
+                    document.getElementById("mean_rating").innerHTML = normalizeRating(body['average_rating']);
                     document.getElementById("title").innerHTML = body['title'];
                     document.getElementById("address").innerHTML = body['houses'];
                     document.getElementById("users_visited").innerHTML = body['visits_count'];
@@ -122,6 +126,10 @@
             
 
             // reviews
+            updateReviews();
+        }
+
+        function updateReviews() {
             fetch(`http://localhost:8081/courtyards/${id}/visits?limit=10`, { 
                 // mode: 'no-cors', 
                 method: 'GET',
@@ -130,6 +138,7 @@
                 }
             })
                 .then((resp) => resp.json().then((body) => {
+                    document.getElementById("reviews").innerHTML = "";
                     for(let i = 0; i < body.length; i++) {
                         let review = body[i];
                         let user = review.user;
