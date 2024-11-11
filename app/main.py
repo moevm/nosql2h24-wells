@@ -42,8 +42,14 @@ def get_user(user_id: str):
 
 
 @app.get("/users/{user_id}/visits")
-def get_user_visits(user_id: str, limit: int = 10, skip: int = 0):
-    return search_visits(user_id=user_id,
+def get_user_visits(courtyard_title: str = None, courtyard_address: str = None,
+                    courtyard_rating: str = None, longitude_str: str = None, latitude_str: str = None,
+                    user_id: str = None, visited_from: str = None, visited_to: str = None, comment_exists: bool = None,
+                    comment: str = None, rating: int = None, limit: int = 10, skip: int = 0):
+    return search_visits(courtyard_title=courtyard_title, courtyard_address=courtyard_address,
+                         courtyard_rating=courtyard_rating, longitude_str=longitude_str, latitude_str=latitude_str,
+                         user_id=user_id, visited_from=visited_from, visited_to=visited_to,
+                         comment_exists=comment_exists, comment=comment, rating=rating,
                          limit=limit, skip=skip)
 
 
@@ -169,6 +175,7 @@ def initialize_demo_data():
     user_check = db.query("MATCH (u:User) RETURN count(u) AS count")
     if user_check[0]['count'] > 0:
         return
+
     def create_coordinates(longitude: float, latitude: float):
         r = 0.0005
         coords = []
