@@ -216,7 +216,9 @@ def get_user_filters(first_name: str = None, last_name: str = None, patronymic: 
 
 
 def search_visits(courtyard_id: str = None, courtyard_title: str = None, courtyard_address: str = None,
-                  courtyard_rating: str = None, longitude_str: str = None, latitude_str: str = None,
+                  courtyard_rating_from: float = None, courtyard_rating_to: float = None,
+                  longitude_from: float = None, longitude_to: float = None,
+                  latitude_from: float = None, latitude_to: float = None,
                   user_id: str = None, user_first_name: str = None, user_last_name: str = None,
                   user_patronymic: str = None, user_nickname: str = None, min_visits: int = None,
                   max_visits: int = None,
@@ -224,9 +226,12 @@ def search_visits(courtyard_id: str = None, courtyard_title: str = None, courtya
                   comment: str = None, rating: int = None,
                   limit: int = 10, skip: int = 0):
     courtyard_filters, courtyard_params = get_courtyards_filters(title=courtyard_title, address=courtyard_address,
-                                                                 rating_str=courtyard_rating,
-                                                                 longitude_str=longitude_str,
-                                                                 latitude_str=latitude_str)
+                                                                 rating_from=courtyard_rating_from,
+                                                                 rating_to=courtyard_rating_to,
+                                                                 longitude_from=longitude_from,
+                                                                 longitude_to=longitude_to,
+                                                                 latitude_from=latitude_from,
+                                                                 latitude_to=latitude_to)
     if courtyard_id:
         courtyard_filters.append("elementId(c) = $courtyard_id")
 

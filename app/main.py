@@ -43,11 +43,15 @@ def get_user(user_id: str):
 
 @app.get("/users/{user_id}/visits")
 def get_user_visits(courtyard_title: str = None, courtyard_address: str = None,
-                    courtyard_rating: str = None, longitude_str: str = None, latitude_str: str = None,
+                    courtyard_rating_from: float = None, courtyard_rating_to: float = None,
+                    longitude_from: float = None, longitude_to: float = None,
+                    latitude_from: float = None, latitude_to: float = None,
                     user_id: str = None, visited_from: str = None, visited_to: str = None, comment_exists: bool = None,
                     comment: str = None, rating: int = None, limit: int = 10, skip: int = 0):
     return search_visits(courtyard_title=courtyard_title, courtyard_address=courtyard_address,
-                         courtyard_rating=courtyard_rating, longitude_str=longitude_str, latitude_str=latitude_str,
+                         courtyard_rating_from=courtyard_rating_from, courtyard_rating_to=courtyard_rating_to,
+                         longitude_from=longitude_from, longitude_to=longitude_to,
+                         latitude_from=latitude_from, latitude_to=latitude_to,
                          user_id=user_id, visited_from=visited_from, visited_to=visited_to,
                          comment_exists=comment_exists, comment=comment, rating=rating,
                          limit=limit, skip=skip)
@@ -75,7 +79,9 @@ def visit_courtyard_by_user(visit: dict, response: Response):
 
 @app.get("/visits")
 def get_visits(courtyard_id: str = None, courtyard_title: str = None, courtyard_address: str = None,
-               courtyard_rating: str = None, longitude: str = None, latitude: str = None,
+               courtyard_rating_from: float = None, courtyard_rating_to: float = None,
+               longitude_from: float = None, longitude_to: float = None,
+               latitude_from: float = None, latitude_to: float = None,
                user_id: str = None, user_first_name: str = None, user_last_name: str = None,
                user_patronymic: str = None, user_nickname: str = None, min_visits: int = None,
                max_visits: int = None,
@@ -84,8 +90,11 @@ def get_visits(courtyard_id: str = None, courtyard_title: str = None, courtyard_
                limit: int = 10, skip: int = 0):
     return search_visits(courtyard_id=courtyard_id, courtyard_title=courtyard_title,
                          courtyard_address=courtyard_address,
-                         courtyard_rating=courtyard_rating, longitude_str=longitude, latitude_str=latitude,
-                         user_id=user_id, user_first_name=user_first_name, user_last_name=user_last_name,
+                         courtyard_rating_from=courtyard_rating_from, courtyard_rating_to=courtyard_rating_to,
+                         longitude_from=longitude_from, longitude_to=longitude_to,
+                         latitude_from=latitude_from, latitude_to=latitude_to,
+                         user_id=user_id,
+                         user_first_name=user_first_name, user_last_name=user_last_name,
                          user_patronymic=user_patronymic, user_nickname=user_nickname, min_visits=min_visits,
                          max_visits=max_visits,
                          visited_from=visited_from, visited_to=visited_to, comment_exists=comment_exists,
@@ -110,10 +119,16 @@ def create_new_courtyard(courtyard_data: dict):
 
 
 @app.get("/courtyards")
-def get_courtyards(title: str = None, address: str = None, rating: str = None, longitude: str = None,
-                   latitude: str = None, limit: int = 10, skip: int = 0):
-    return search_courtyards(title=title, address=address, rating_str=rating, longitude_str=longitude,
-                             latitude_str=latitude, limit=limit, skip=skip)
+def get_courtyards(title: str = None, address: str = None,
+                   rating_from: float = None, rating_to: float = None,
+                   longitude_from: float = None, longitude_to: float = None,
+                   latitude_from: float = None, latitude_to: float = None,
+                   limit: int = 10, skip: int = 0):
+    return search_courtyards(title=title, address=address,
+                             rating_from=rating_from, rating_to=rating_to,
+                             longitude_from=longitude_from, longitude_to=longitude_to,
+                             latitude_from=latitude_from, latitude_to=latitude_to,
+                             limit=limit, skip=skip)
 
 
 @app.post("/import")

@@ -79,11 +79,15 @@ def get_courtyard_by_id(courtyard_id: str):
     return result[0]
 
 
-def search_courtyards(title: str = None, address: str = None, rating_str: str = None,
-                      longitude_str: str = None, latitude_str: str = None,
+def search_courtyards(title: str = None, address: str = None,
+                      rating_from: float = None, rating_to: float = None,
+                      longitude_from: float = None, longitude_to: float = None,
+                      latitude_from: float = None, latitude_to: float = None,
                       limit: int = 10, skip: int = 0):
-    filters, filter_params = get_courtyards_filters(title=title, address=address, rating_str=rating_str,
-                                                    longitude_str=longitude_str, latitude_str=latitude_str)
+    filters, filter_params = get_courtyards_filters(title=title, address=address,
+                                                    rating_from=rating_from, rating_to=rating_to,
+                                                    longitude_from=longitude_from, longitude_to=longitude_to,
+                                                    latitude_from=latitude_from, latitude_to=latitude_to)
     filter_query = " AND ".join(filters) if filters else "1=1"
 
     query = """
@@ -110,44 +114,35 @@ def search_courtyards(title: str = None, address: str = None, rating_str: str = 
     })
 
 
-def get_courtyards_filters(title: str = None, address: str = None, rating_str: str = None,
-                           longitude_str: str = None, latitude_str: str = None):
-    longitude_min, longitude_max = get_float_range(longitude_str)
-    latitude_min, latitude_max = get_float_range(latitude_str)
-    rating_min, rating_max = get_float_range(rating_str)
-
+def get_courtyards_filters(title: str = None, address: str = None,
+                           rating_from: float = None, rating_to: float = None,
+                           longitude_from: float = None, longitude_to: float = None,
+                           latitude_from: float = None, latitude_to: float = None, ):
     filters = []
     if title:
         filters.append("c.title CONTAINS $title")
     if address:
         filters.append("h.address CONTAINS $address")
-    if rating_min is not None and rating_max is not None:
-        filters.append("average_rating >= $rating_min AND average_rating <= $rating_max")
-    if longitude_min is not None and longitude_max is not None:
-        filters.append("coords.longitude >= $longitude_min AND coords.longitude <= $longitude_max")
-    if latitude_min is not None and latitude_max is not None:
-        filters.append("coords.latitude >= $latitude_min AND coords.latitude <= $latitude_max")
+    if rating_from is not None:
+        filters.append("average_rating >= $rating_from")
+    if rating_to is not None:
+        filters.append("average_rating <= $rating_to")
+    if longitude_from is not None:
+        filters.append("coords.longitude >= $longitude_from")
+    if longitude_to is not None:
+        filters.append("coords.longitude <= $longitude_to")
+    if latitude_from is not None:
+        filters.append("coords.latitude >= $latitude_from")
+    if latitude_to is not None:
+        filters.append("coords.latitude <= $latitude_to")
 
     return filters, {
         "title": title,
         "address": address,
-        "longitude_min": longitude_min,
-        "longitude_max": longitude_max,
-        "latitude_min": latitude_min,
-        "latitude_max": latitude_max,
-        "rating_min": rating_min,
-        "rating_max": rating_max,
+        "longitude_from": longitude_from,
+        "longitude_to": longitude_to,
+        "latitude_from": latitude_from,
+        "latitude_to": latitude_to,
+        "rating_from": rating_from,
+        "rating_to": rating_to,
     }
-
-
-def get_float_range(s: str):
-    if not s:
-        return None, None
-
-    val = float(s)
-    frac = s.split(".")
-    rng = 1.0
-    if len(frac) == 2:
-        rng = 0.1 ** len(frac[1])
-
-    return val, val + rng - rng / 10
