@@ -7,39 +7,35 @@
     <title>Войти или зарегистрироваться</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             display: flex;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background-color: #f8f9fa;
         }
         .login-container {
-            max-width: 380px;
+            width: 30vw;
+            max-width: 400px;
             padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .login-btn {
-            width: 100%;
-            background-color: #1a73e8;
-            color: #fff;
         }
     </style>
 </head>
 <body>
-    <div class="login-container text-center">
+    <div class="container text-center" style="display: flex;justify-content: center;flex-direction: column;align-items: center;">
         <h2 class="mb-4">Войдите или зарегистрируйтесь</h2>
-        <div>
-            <div class="form-group">
-                <input type="text" class="form-control" placeholder="Логин" required name="login">
+        <div class="login-container text-center">
+            
+            <div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Логин" required="" name="login">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="Пароль" required="" name="password">
+                </div>
+                <button class="btn btn-primary" onclick="login()">Войти/Зарегистрироваться</button>
             </div>
-            <div class="form-group">
-                <input type="password" class="form-control" placeholder="Пароль" required name="password">
-            </div>
-            <button class="btn login-btn" onclick="login()">Войти/Зарегистрироваться</button>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

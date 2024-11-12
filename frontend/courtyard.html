@@ -15,7 +15,7 @@
             <div class="header d-flex justify-content-between align-items-center">
                 <p></p>
                 <h2 class="py-2" id="title">Название двора</h2>
-                <span>
+                <span class="mr-2">
                     <span class="text-warning">★</span> <span id="mean_rating">4.7</span> / 5
                 </span>
             </div>
@@ -73,6 +73,10 @@
         const id = urlParams.get('id');
 
         function sendReview() {
+            if (!localStorage.user_id) {
+                window.location.href = "login.html";
+                return;
+            }
             document.getElementById("error").innerHTML = "";
 
             const visitDate = document.querySelector("input[name='visit_date']").value;
