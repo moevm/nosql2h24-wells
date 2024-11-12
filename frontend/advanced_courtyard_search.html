@@ -23,19 +23,19 @@
                         <input name="title" type="text" class="form-control" placeholder="Название">
                     </div>
                     <div class="col doubled">
-                        <input name="rating_min" type="number" min="1" max="5" class="form-control" placeholder="Рейтинг, от">
-                        <input name="rating_max" type="number" min="1" max="5" class="form-control" placeholder="Рейтинг, до">
+                        <input name="rating_from" type="number" min="1" max="5" class="form-control" placeholder="Рейтинг, от">
+                        <input name="rating_to" type="number" min="1" max="5" class="form-control" placeholder="Рейтинг, до">
                     </div>
                     
                 </div>
                 <div class="form-row">
                     <div class="col doubled">
-                        <input name="longitude_min" type="number" class="form-control" placeholder="Долгота, от">
-                        <input name="longitude_max" type="number" class="form-control" placeholder="Долгота, до">
+                        <input name="longitude_from" type="number" class="form-control" placeholder="Долгота, от">
+                        <input name="longitude_to" type="number" class="form-control" placeholder="Долгота, до">
                     </div>
                     <div class="col doubled">
-                        <input name="latitude_min" type="number" class="form-control" placeholder="Широта, от">
-                        <input name="latitude_max" type="number" class="form-control" placeholder="Широта, до">
+                        <input name="latitude_from" type="number" class="form-control" placeholder="Широта, от">
+                        <input name="latitude_to" type="number" class="form-control" placeholder="Широта, до">
                     </div>
                     <div class="col">
                         <button type="submit" class="btn btn-primary btn-block" onclick="findCourtyards()">Найти</button>
@@ -62,24 +62,33 @@
             const address = document.querySelector("input[name='address']").value;
             const title = document.querySelector("input[name='title']").value;
 
-            const rating_min = document.querySelector("input[name='rating_min']").value;
-            const rating_max = document.querySelector("input[name='rating_max']").value;
+            const rating_from = document.querySelector("input[name='rating_from']").value;
+            const rating_to = document.querySelector("input[name='rating_to']").value;
 
-            const latitude_min = document.querySelector("input[name='latitude_min']").value;
-            const latitude_max = document.querySelector("input[name='latitude_max']").value;
+            const latitude_from = document.querySelector("input[name='latitude_from']").value;
+            const latitude_to = document.querySelector("input[name='latitude_to']").value;
             
-            const longitude_min = document.querySelector("input[name='longitude_min']").value;
-            const longitude_max = document.querySelector("input[name='longitude_max']").value;
+            const longitude_from = document.querySelector("input[name='longitude_from']").value;
+            const longitude_to = document.querySelector("input[name='longitude_to']").value;
 
-            const data = {
+            let data = {
                 address: address,
                 title: title,
-                rating_min: rating_min,
-                latitude_min: latitude_min,
-                latitude_max: latitude_max,
-                longitude_min: longitude_min,
-                longitude_max: longitude_max
             };
+            if (rating_from) 
+                data.rating_from = rating_from;
+            if (rating_to) 
+                data.rating_to = rating_to;
+            if (latitude_from) 
+                data.latitude_from = latitude_from;
+            if (latitude_to) 
+                data.latitude_to = latitude_to;
+            if (longitude_from) 
+                data.longitude_from = longitude_from;
+            if (longitude_to) 
+                data.longitude_to = longitude_to;
+
+
             console.log(data);
             let list = document.getElementById("found-courtyards-list");
 
