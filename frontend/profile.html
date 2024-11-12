@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль пользователя</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="row">
+            <!-- User Profile Section -->
+             
+            <div class="col-md-4 mb-4">
+                <div class="card">
+        
+                    <div class="card-body text-center">
+                        <div class="position-relative" id="user-image">
+                            <img id="avatar_url" src="https://via.placeholder.com/150" alt="Avatar" class="rounded-circle mb-3 h-100 w-100">
+                            
+                        </div>
+
+                        <h5 id="username">username</h5>
+                        <p id="full_name">FIO</p>
+                        <p>Дворов посещено: <span class="text-success" id="visited">N</span></p>
+                        <p>На сайте с <span id="registration_date">01.01.1970
+                        </span></p>
+                    </div>
+                </div>
+            </div>
+            <!-- Visited Yards Section -->
+            <div class="col-md-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Посещённые дворы</h5>
+                        <input type="text" class="form-control mb-3" placeholder="Поиск по дворам" name="courtyard" oninput="filterVisits()">
+                        <div class="d-flex mb-3">
+                            <input class="form-control mr-2" type="date" name="start_date" oninput="filterVisits()">
+                            <input class="form-control" type="date" name="end_date" oninput="filterVisits()">
+                        </div>
+                        <div class="list-group" id="visits">
+                            
+                            
+                            <!-- More visited yards if needed -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="scripts/templates.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+
+        function filterVisits() {
+            const startDate = document.querySelector("input[name='start_date']").value;
+            const endDate = document.querySelector("input[name='end_date']").value;
+            const courtyard = document.querySelector("input[name='courtyard']").value;
+
+            const data = {
+                visited_from: startDate,
+                visited_to: endDate,
+                courtyard_title: courtyard
+            };
+
+            // visits
+            fetch(`http://localhost:8081/users/${id}/visits?` + new URLSearchParams(data).toString(), { 
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then((resp) => resp.json().then((body) => {
+                    document.getElementById("visits").innerHTML = "";
+                    for(let i = 0; i < body.length; i++) {
+                        let review = body[i];
+                        let courtyard = review.courtyard;
+                        let card = generateVisitCard(
+                            courtyard.title, courtyard.houses, courtyard.average_rating, 
+                            review.visited_at, courtyard.id
+                        );
+                        document.getElementById("visits").innerHTML += card;
+                    }
+                }));
+        }
+
+        window.onload = () => {
+            if (id == localStorage.user_id)
+                document.getElementById("user-image").innerHTML += `<a href="edit_profile.html" style="color:black">
+                                <span class="position-absolute translate-middle badge rounded-pill" style="bottom: 10%; right: 10%; transform: scale(1.5); background-color: lightgray;">
+                                    <span class="material-icons">edit</span>
+                                </span> 
+                            </a>`
+
+            // user info
+            fetch(`http://localhost:8081/users/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then((resp) => resp.json().then((body) => {
+                    document.getElementById("username").innerHTML = body["nickname"];
+                    document.getElementById("full_name").innerHTML = `${body["last_name"]} ${body["first_name"]} ${body["patronymic"]}`;
+                    document.getElementById("visited").innerHTML = body["visits_count"];
+                    document.getElementById("registration_date").innerHTML = timestampToDate(body["created_at"]);
+                    document.getElementById("avatar_url").src = body["avatar_url"];
+                }));
+            
+
+            // visits
+            fetch(`http://localhost:8081/users/${id}/visits`, { 
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then((resp) => resp.json().then((body) => {
+                    for(let i = 0; i < body.length; i++) {
+                        let review = body[i];
+                        let courtyard = review.courtyard;
+                        let card = generateVisitCard(
+                            courtyard.title, courtyard.houses, courtyard.average_rating, review.visited_at, courtyard.id);
+                        document.getElementById("visits").innerHTML += card;
+                    }
+                }));
+        }
+    </script>
+</body>
+</html>

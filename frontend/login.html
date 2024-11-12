@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Войти или зарегистрироваться</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .login-container {
+            width: 30vw;
+            max-width: 400px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container text-center" style="display: flex;justify-content: center;flex-direction: column;align-items: center;">
+        <h2 class="mb-4">Войдите или зарегистрируйтесь</h2>
+        <div class="login-container text-center">
+            
+            <div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Логин" required="" name="login">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="Пароль" required="" name="password">
+                </div>
+                <button class="btn btn-primary" onclick="login()">Войти/Зарегистрироваться</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script> 
+
+        function login() {
+
+            const login = document.querySelector("input[name='login']").value;
+            const password = document.querySelector("input[name='password']").value;
+
+            const data = {
+                nickname: login,
+                password: password
+            };
+            console.log(data);
+
+            fetch(`http://localhost:8081/login`, { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then((resp) => resp.json().then((body) => {
+                    if ("details" in body) {
+                        console.log(body["details"]);
+                        return;
+                    }
+                    console.log("ok", body);
+                    localStorage.setItem('user_id', body["id"]);
+                    window.location.href = 'index.html'
+                }));
+        }
+
+    </script>
+</body>
+</html>

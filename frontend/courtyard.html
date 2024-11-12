@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Двор-восьмиугольник</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel= "stylesheet" href= "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <div class="header d-flex justify-content-between align-items-center">
+                <p></p>
+                <h2 class="py-2" id="title">Название двора</h2>
+                <span class="mr-2">
+                    <span class="text-warning">★</span> <span id="mean_rating">4.7</span> / 5
+                </span>
+            </div>
+        </div>
+        <div class="text-center mb-4">
+            <h3> 
+                <span id="address">Адрес двора</span>
+            </h3>
+            <p class="mb-0">Двор посетили <span class="text-warning" id="users_visited">N</span> пользователей</p>
+        </div>
+        
+        <!-- Reviews Section -->
+        <div class="bg-light p-4 rounded">
+            <h3>Отзывы</h3>
+            <div class="d-flex mb-3">
+                <div class="form-group mr-3">
+                    <label for="visit_date">Дата посещения</label>
+                    <input class="form-control" type="date" name="visit_date" placeholder="в" value="" min="2000-01-01" max="2024-11-16">
+                </div>
+                <div class="form-group">
+                    <label>Ваша оценка двора:</label>
+                    <div>
+                        <input type="radio" name="rating" id="star1" value="1"> 1 
+                        <input type="radio" name="rating" id="star2" value="2"> 2 
+                        <input type="radio" name="rating" id="star3" value="3"> 3 
+                        <input type="radio" name="rating" id="star4" value="4"> 4 
+                        <input type="radio" name="rating" id="star5" value="5"> 5 
+                    </div>
+                    <p id="error" class="text-danger mb-0"></p>
+                </div>
+            </div>
+            <div class="input-group mb-4">
+                <textarea class="form-control" placeholder="Добавить свой отзыв" id="comment"></textarea>
+                <div class="input-group-append">
+                    <button class="btn btn-primary" onclick="sendReview()">Отправить</button>
+                </div>
+            </div>
+            
+            <!-- User Reviews -->
+            <div class="list-group" id="reviews">
+                
+                
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script type= "text/javascript" src= "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <script src="scripts/templates.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+
+        function sendReview() {
+            if (!localStorage.user_id) {
+                window.location.href = "login.html";
+                return;
+            }
+            document.getElementById("error").innerHTML = "";
+
+            const visitDate = document.querySelector("input[name='visit_date']").value;
+            if (!document.querySelector("input[name='rating']:checked") || visitDate == "") {
+                document.getElementById("error").innerHTML = "Необходимо выбрать дату посещения и поставить оценку!";
+                return;
+            }
+            const rating = document.querySelector("input[name='rating']:checked").value;
+            const comment = document.getElementById("comment").value;
+
+            const data = {
+                visited_at: visitDate,
+                rating: parseInt(rating),
+                comment: comment,
+                courtyard_id: id,
+                user_id: localStorage.user_id
+            };
+            console.log(data);
+
+            fetch(`http://localhost:8081/visits`, { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then((resp) => {
+                    if (resp.ok) {
+                        updateReviews();
+                    } else {
+                        document.getElementById("error").innerHTML = "Ошибка при добавлении отзыва!";
+                    }
+                });
+        }
+
+        window.onload = () => {
+            // courtyard info
+            fetch(`http://localhost:8081/courtyards/${id}`, { 
+                // mode: 'no-cors', 
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then((resp) => resp.json().then((body) => {
+                    document.getElementById("mean_rating").innerHTML = normalizeRating(body['average_rating']);
+                    document.getElementById("title").innerHTML = body['title'];
+                    document.getElementById("address").innerHTML = body['houses'];
+                    document.getElementById("users_visited").innerHTML = body['visits_count'];
+                }));
+            
+
+            // reviews
+            updateReviews();
+        }
+
+        function updateReviews() {
+            fetch(`http://localhost:8081/courtyards/${id}/visits?limit=10`, { 
+                // mode: 'no-cors', 
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then((resp) => resp.json().then((body) => {
+                    document.getElementById("reviews").innerHTML = "";
+                    for(let i = 0; i < body.length; i++) {
+                        let review = body[i];
+                        let user = review.user;
+                        let card = generateReviewCard(user.nickname, user.last_name, user.first_name, user.patronymic, review.visited_at, review.rating, review.comment);
+                        document.getElementById("reviews").innerHTML += card;
+                    }
+                }));
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+/* MAIN */
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+.search {
+    position: relative;
+}
+
+.btn-outline-secondary {
+    display: inline-block;
+}
+
+.btn-search {
+    height: calc(1.5em + .75rem + 2px)
+}
+
+.floating-btn {
+    position: fixed;
+    z-index: 1;
+    right: 20px;
+    border-radius: 50%;
+    background-color: #2F2AB7;
+    height: 48px;
+    width: 48px;
+    align-items: center;
+    justify-content: center;
+}
+
+.bottom {
+    bottom: 20px;
+}
+
+.top {
+    top: 20px;
+}
+
+.btn-icon {
+    transform: scale(2) translate(25%, 25%);
+}
+
+/* lists */
+.container-fluid {
+    height: 100vh; /* Высота контейнера равна высоте вьюпорта */
+}
+
+.col-md-4 {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+#courtyards {
+    flex: 0 0 60%; /* 60% высоты контейнера */
+}
+#users {
+    flex: 0 0 40%; /* 40% высоты контейнера */
+}
+
+#courtyards, #users {
+    overflow-y: auto; /* Скролл, если контент переполнен */
+    padding: 2px;
+}
+
+#courtyards-list, #users-list {
+    overflow-y: scroll; /* Скролл, если контент переполнен */
+    height: calc(100% - 1rem - (1.5em + .75rem + 2px));
+}
+
+#users-list {
+    height: calc(100% - 2rem - (1.5em + .75rem + 2px));
+}
+
+/* ADVANCED SEARCH */
+.btn-outline-secondary {
+    display: inline-block;
+}
+
+.header {
+    background-color: #2F2AB7;
+    width: 100%;;
+    color: white;
+    border-radius: 5px;
+}
+
+.content {
+    background-color: #E5E5E5;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.list-group-item {
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.btn-outline-secondary {
+    display: inline-block;
+}
+
+.btn {
+    background-color: #2F2AB7;
+}
+
+.advanced-search-card {
+    border-radius: 12px;
+}
+
+.card-aka {
+    color: #ccc;
+}
+
+.purple {
+    color: #2F2AB7;
+}
+
+.f-24 {
+    transform: scale(2);
+}
+
+.doubled input {
+    width: calc(50% - 4px);
+    display: inline-block;
+}
+
+/* PROFILE */
+
+.card {
+    background: #E5E5E5;
+    border-radius: 12px;
+}

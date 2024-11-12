@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расширенный поиск пользователей</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <h2 class="header py-2">Расширенный поиск пользователей</h2>
+        </div>
+        <div class="content p-4">
+            <div class="mb-4">
+                <div class="form-row mb-3">
+                    <div class="col">
+                        <input name="last_name" type="text" class="form-control" placeholder="Фамилия">
+                    </div>
+                    <div class="col">
+                        <input name="first_name" type="text" class="form-control" placeholder="Имя">
+                    </div>
+                    <div class="col">
+                        <input name="patronymic" type="text" class="form-control" placeholder="Отчество">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input name="username" type="text" class="form-control" placeholder="Никнейм">
+                    </div>
+                    <div class="col doubled">
+                        <input name="min_visits" type="number" min="0" class="form-control" placeholder="Посетил, от">
+                        <input name="max_visits" type="number" min="0" class="form-control" placeholder="Посетил, до">
+                    </div>
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary btn-block" id="find" onclick="findUsers()">Найти</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="found-users-list">
+                
+
+
+            </div>
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="scripts/templates.js"></script>
+    <script>
+        function findUsers() {
+            const last_name = document.querySelector("input[name='last_name']").value;
+            const first_name = document.querySelector("input[name='first_name']").value;
+            const patronymic = document.querySelector("input[name='patronymic']").value;
+            const username = document.querySelector("input[name='username']").value;
+            const min_visits = document.querySelector("input[name='min_visits']").value;
+            const max_visits = document.querySelector("input[name='max_visits']").value;
+
+            let data = {
+                last_name: last_name,
+                first_name: first_name,
+                patronymic: patronymic,
+                nickname: username,
+                min_visits: min_visits ? min_visits : 0
+            };
+            if (max_visits) 
+                data.max_visits = max_visits;
+            
+            console.log(data);
+            let list = document.getElementById("found-users-list");
+
+            fetch(`http://localhost:8081/users?` + new URLSearchParams(data).toString(), { 
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then((resp) => resp.json().then((body) => {
+                    if (body.length === 0) {
+                        list.innerHTML = "<p>Ничего не найдено</p>";
+                        return;
+                    }
+                    list.innerHTML = "";
+                    body.forEach(user => 
+                        list.innerHTML += addColumnClass(
+                            generateUserCard(
+                                user.nickname, user.last_name, user.first_name, user.patronymic, user.visited_courtyards, user.id
+                            )
+                        )
+                    );
+                    
+                }));
+            }
+        window.onload = () => {
+            
+        }
+    </script>
+</body>
+</html>
