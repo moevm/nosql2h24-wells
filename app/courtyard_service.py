@@ -120,9 +120,9 @@ def get_courtyards_filters(title: str = None, address: str = None,
                            latitude_from: float = None, latitude_to: float = None, ):
     filters = []
     if title:
-        filters.append("c.title CONTAINS $title")
+        filters.append("toLower(c.title) CONTAINS toLower($title)")
     if address:
-        filters.append("h.address CONTAINS $address")
+        filters.append("toLower(h.address) CONTAINS toLower($address)")
     if rating_from is not None:
         filters.append("average_rating >= $rating_from")
     if rating_to is not None:

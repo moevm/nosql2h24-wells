@@ -193,13 +193,13 @@ def get_user_filters(first_name: str = None, last_name: str = None, patronymic: 
                      min_visits: int = None, max_visits: int = None):
     filters = []
     if first_name:
-        filters.append("u.first_name CONTAINS $first_name")
+        filters.append("toLower(u.first_name) CONTAINS toLower($first_name)")
     if patronymic:
-        filters.append("u.patronymic CONTAINS $patronymic")
+        filters.append("toLower(u.patronymic) CONTAINS toLower($patronymic)")
     if last_name:
-        filters.append("u.last_name CONTAINS $last_name")
+        filters.append("toLower(u.last_name) CONTAINS toLower($last_name)")
     if nickname:
-        filters.append("u.nickname CONTAINS $nickname")
+        filters.append("toLower(u.nickname) CONTAINS toLower($nickname)")
     if min_visits is not None:
         filters.append("visited_courtyards >= $min_visits")
     if max_visits is not None:
@@ -249,7 +249,7 @@ def search_visits(courtyard_id: str = None, courtyard_title: str = None, courtya
     if comment_exists:
         visit_filters.append("v.comment <> \"\"")
     if comment:
-        visit_filters.append("v.comment CONTAINS $comment")
+        visit_filters.append("toLower(v.comment) CONTAINS toLower($comment)")
     if rating:
         visit_filters.append("v.rating = $rating")
 
