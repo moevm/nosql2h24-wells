@@ -191,20 +191,7 @@ def initialize_demo_data():
     if user_check[0]['count'] > 0:
         return
 
-    def create_coordinates(longitude: float, latitude: float):
-        r = 0.0002
-        coords = []
-        for i in range(8):
-            coords.append({
-                "longitude": longitude + r * math.sin(i * math.pi / 4),
-                "latitude": latitude + r * math.cos(i * math.pi / 4)
-            })
-        return coords
-
     print("Инициализация демонстрационных данных...")
-    coord1 = create_coordinates(longitude=30.283151, latitude=59.916766)
-    coord2 = create_coordinates(longitude=30.290646, latitude=59.953568)
-    coord3 = create_coordinates(longitude=30.307252, latitude=59.963390)
     demo_data = {
         'users': [
             {
@@ -236,17 +223,44 @@ def initialize_demo_data():
             {
                 "title": "Двор дома-утюга",
                 "houses": ["наб. реки Фонтанки, д. 199", "Садовая ул., д. 128"],
-                "coordinates": coord1
+                "coordinates": [{"latitude": 59.916889791988844, "longitude": 30.283036165012337},
+                                {"latitude": 59.91694702877919, "longitude": 30.28344788409613},
+                                {"latitude": 59.916912013342724, "longitude": 30.28350957490346},
+                                {"latitude": 59.91684534923626, "longitude": 30.28350957490346},
+                                {"latitude": 59.91682380121354, "longitude": 30.283175639881097},
+                                {"latitude": 59.91686353036952, "longitude": 30.282998614086125}]
             },
             {
                 "title": "Двор-восьмиугольник",
                 "houses": ["Малый просп. П. С., д. 1б"],
-                "coordinates": coord2
+                "coordinates": [{"latitude": 59.95362600283601, "longitude": 30.290543811186765},
+                                {"latitude": 59.953643827436736, "longitude": 30.290643052920306},
+                                {"latitude": 59.95362230338934, "longitude": 30.290740282997103},
+                                {"latitude": 59.95358429995893, "longitude": 30.29076107011696},
+                                {"latitude": 59.95354764174126, "longitude": 30.29075369404217},
+                                {"latitude": 59.95351972765831, "longitude": 30.290697367652868},
+                                {"latitude": 59.95351468294201, "longitude": 30.290648417338332},
+                                {"latitude": 59.9535251086882, "longitude": 30.290567951067885},
+                                {"latitude": 59.95355369539468, "longitude": 30.290530400141673},
+                                {"latitude": 59.9535819457627, "longitude": 30.290522353514636},
+                                {"latitude": 59.95360817822563, "longitude": 30.290529729589426}],
             },
             {
                 "title": "Бармалеева, 4",
                 "houses": ["Бармалеева, 4"],
-                "coordinates": coord3
+                "coordinates": [{"latitude": 59.96365908342769, "longitude": 30.30676060482406},
+                                {"latitude": 59.96359116870545, "longitude": 30.306953723873136},
+                                {"latitude": 59.963553512957674, "longitude": 30.306888009752274},
+                                {"latitude": 59.96345264913597, "longitude": 30.307150866235723},
+                                {"latitude": 59.96348021861117, "longitude": 30.307205851520532},
+                                {"latitude": 59.963392803122794, "longitude": 30.307432498182287},
+                                {"latitude": 59.96330874955029, "longitude": 30.30730106994056},
+                                {"latitude": 59.963409613811585, "longitude": 30.30705967112922},
+                                {"latitude": 59.96343180390773, "longitude": 30.307099904264444},
+                                {"latitude": 59.96353266779311, "longitude": 30.306842412199025},
+                                {"latitude": 59.96350106380885, "longitude": 30.30679010912323},
+                                {"latitude": 59.96356897871644, "longitude": 30.306621129955296}]
+
             }
         ],
         'visits': [
