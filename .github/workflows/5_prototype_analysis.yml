@@ -127,11 +127,11 @@ jobs:
     
       - name: Build docker-compose
         run: |
-          docker-compose build --no-cache
+          docker compose build --no-cache
 
       - name: Run docker-compose
         run: |
-          docker-compose up -d
+          docker compose up -d
           sleep 30
 
       - name: Check containers are alive
