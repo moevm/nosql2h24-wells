@@ -15,15 +15,18 @@
             <div class="mb-4">
                 <div class="form-row mb-3">
                     <div class="col">
-                        <button class="btn btn-primary btn-block">Импорт</button>
+                        <input type="file" id="customFile" accept=".json" onchange="showFiles(this)" style="display: none;"> 
+                        <button class="btn btn-primary btn-block" type="button" onclick="document.getElementById('customFile').click()"> 
+                            Import 
+                        </button> 
                     </div>
                     <div class="col">
-                        <button class="btn btn-primary btn-block">Экспорт</button>
+                        <button class="btn btn-primary btn-block" onclick="exportData()">Экспорт</button>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="col">
-                        <button class="btn btn-primary btn-block">Отзывы / Посещения</button>
+                        <a class="btn btn-primary btn-block" href="advanced_courtyard_search.html">Отзывы / Посещения</a>
                     </div>
                     <div class="col">
                         <button class="btn btn-primary btn-block">Статистика</button>
@@ -35,5 +38,51 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function exportData() {
+
+            fetch(`http://localhost:8081/export`, { 
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then((resp) => resp.json().then((body) => {
+                    function downloadObjectAsJson(exportObj, exportName){
+                        var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
+                        var downloadAnchorNode = document.createElement('a');
+                        downloadAnchorNode.setAttribute("href",     dataStr);
+                        downloadAnchorNode.setAttribute("download", exportName + ".json");
+                        document.body.appendChild(downloadAnchorNode);
+                        downloadAnchorNode.click();
+                        downloadAnchorNode.remove();
+                    }
+
+                    downloadObjectAsJson(body, 'data');
+                }));
+        }
+
+        function showFiles(input) {
+			const file = input.files[0];
+            console.log(file); 
+            const reader = new FileReader(); 
+            reader.onload = function (e) { 
+                fetch(`http://localhost:8081/import`, { 
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        data: e.target.result
+                    })
+                })
+                    .then((resp) => resp.json().then((body) => {
+                        console.log(body);
+                    }));
+                
+            }; 
+            reader.readAsDataURL(file); 
+        }
+    </script>
 </body>
 </html>
