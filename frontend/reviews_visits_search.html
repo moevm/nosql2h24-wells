@@ -11,10 +11,13 @@
 <body>
     <div class="container mt-5">
         <div class="text-center mb-4">
-            <h2 class="header py-2">Расширенный поиск дворов</h2>
+            <h2 class="header py-2">Поиск по посещениям / отзывам</h2>
         </div>
         <div class="content p-4">
+            <h3>По дворам</h3>
+
             <div class="mb-4">
+
                 <div class="form-row mb-3">
                     <div class="col">
                         <input name="address" type="text" class="form-control" placeholder="Адрес">
@@ -38,16 +41,70 @@
                         <input name="latitude_to" type="number" class="form-control" placeholder="Широта, до">
                     </div>
                     <div class="col">
-                        <button type="submit" class="btn btn-primary btn-block" onclick="findCourtyards()">Найти</button>
+
                     </div>
                 </div>
+                
             </div>
+            
+            <h3>По пользователям и посещениям</h3>
+            <div class="mb-4">
+                <div class="form-row mb-3">
+                    <div class="col">
+                        <input name="last_name" type="text" class="form-control" placeholder="Фамилия">
+                    </div>
+                    <div class="col">
+                        <input name="first_name" type="text" class="form-control" placeholder="Имя">
+                    </div>
+                    <div class="col">
+                        <input name="patronymic" type="text" class="form-control" placeholder="Отчество">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input name="nickname" type="text" class="form-control" placeholder="Никнейм">
+                    </div>
+                    <div class="col doubled">
+                        <input name="min_visits" type="number" min="0" class="form-control" placeholder="Посетил, от">
+                        <input name="max_visits" type="number" min="0" class="form-control" placeholder="Посетил, до">
+                    </div>
+
+                    
+                    <div class="col doubled">
+                        <input class="form-control" type="date" name="visit_date_min" value="" min="2000-01-01" max="2024-11-16" hint="Date">
+                        <input class="form-control" type="date" name="visit_date_max" placeholder="в" value="" min="2000-01-01" max="2024-11-16">
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+                    <div class="col">
+                        <input class="form-check-input" type="checkbox" value="" name="with_comment">
+                        <label class="form-check-label" for="with_comment">
+                            С комментарием
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-md-8">
+                        <textarea class="form-control" name="comment" placeholder="Комментарий"></textarea>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary btn-block" id="find" onclick="findVisits()">Найти</button>
+                    </div>
+                </div>
+                
+            </div>
+            
+                
+                
 
             <div class="list-group">
                 
             </div>
 
-            <div class="row" id="found-courtyards-list">
+            <div class="row" id="found-visits-list">
                 
 
                 
@@ -58,7 +115,7 @@
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script src="scripts/templates.js"></script>
     <script>
-        function findCourtyards() {
+        function findVisits() {
             const address = document.querySelector("input[name='address']").value;
             const title = document.querySelector("input[name='title']").value;
 
@@ -71,10 +128,27 @@
             const longitude_from = document.querySelector("input[name='longitude_from']").value;
             const longitude_to = document.querySelector("input[name='longitude_to']").value;
 
-            let data = {
-                address: address,
-                title: title,
-            };
+            const last_name = document.querySelector("input[name='last_name']").value;
+            const first_name = document.querySelector("input[name='first_name']").value;
+            const patronymic = document.querySelector("input[name='patronymic']").value;
+
+            const nickname = document.querySelector("input[name='nickname']").value;
+
+            const min_visits = document.querySelector("input[name='min_visits']").value;
+            const max_visits = document.querySelector("input[name='max_visits']").value;
+
+            const visit_date_min = document.querySelector("input[name='visit_date_min']").value;
+            const visit_date_max = document.querySelector("input[name='visit_date_max']").value;
+
+            const with_comment = document.querySelector("input[name='with_comment']").value;
+
+            const comment = document.querySelector("input[name='comment']").value;
+
+            let data = {};
+            if (address) 
+                data.address = address;
+            if (title) 
+                data.title = title;
             if (rating_from) 
                 data.rating_from = rating_from;
             if (rating_to) 
@@ -88,29 +162,51 @@
             if (longitude_to) 
                 data.longitude_to = longitude_to;
 
+            if (last_name) 
+                data.last_name = last_name;
+            if (first_name) 
+                data.first_name = first_name;
+            if (patronymic) 
+                data.patronymic = patronymic;
+            if (nickname) 
+                data.nickname = nickname;
+            if (min_visits) 
+                data.min_visits = min_visits;
+            if (max_visits) 
+                data.max_visits = max_visits;
+            if (visit_date_min) 
+                data.visit_date_min = visit_date_min;
+            if (visit_date_max) 
+                data.visit_date_max = visit_date_max;
+            if (with_comment) 
+                data.with_comment = with_comment;
+            if (comment) 
+                data.comment = comment;
+
 
             console.log(data);
-            let list = document.getElementById("found-courtyards-list");
+            let list = document.getElementById("found-visits-list");
 
-            fetch(`http://localhost:8081/courtyards?` + new URLSearchParams(data).toString(), { 
+            fetch(`http://localhost:8081/visits?` + new URLSearchParams(data).toString(), { 
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })
                 .then((resp) => resp.json().then((body) => {
+                    console.log(body);
                     if (body.length === 0) {
                         list.innerHTML = "<p>Ничего не найдено</p>";
                         return;
                     }
                     list.innerHTML = "";
-                    body.forEach(courtyard => 
-                        list.innerHTML += addColumnClass(
-                            generateCourtyardCard(
-                                courtyard.title, collapseHouses(courtyard.houses), courtyard.average_rating, courtyard.id
-                            )
-                        )
-                    );
+                    // body.forEach(courtyard => 
+                    //     list.innerHTML += addColumnClass(
+                    //         generateCourtyardCard(
+                    //             courtyard.title, collapseHouses(courtyard.houses), courtyard.average_rating, courtyard.id
+                    //         )
+                    //     )
+                    // );
                     
                 }));
         }
