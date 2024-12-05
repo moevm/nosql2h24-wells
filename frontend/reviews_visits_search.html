@@ -95,20 +95,13 @@
                     </div>
                 </div>
                 
-            </div>
-            
-                
+            </div>                
                 
 
-            <div class="list-group">
+            <div class="list-group" id="found-visits-list">
                 
             </div>
 
-            <div class="row" id="found-visits-list">
-                
-
-                
-            </div>
         </div>
 
     </div>
@@ -200,13 +193,22 @@
                         return;
                     }
                     list.innerHTML = "";
-                    // body.forEach(courtyard => 
-                    //     list.innerHTML += addColumnClass(
-                    //         generateCourtyardCard(
-                    //             courtyard.title, collapseHouses(courtyard.houses), courtyard.average_rating, courtyard.id
-                    //         )
-                    //     )
-                    // );
+
+                    for(let i = 0; i < body.length; i++) {
+                        let review = body[i];
+                        const user = review.user;
+                        const courtyard = review.courtyard;
+                        let card = addColumnClass(generateReviewCard(
+                            user.nickname, 
+                            user.last_name, 
+                            user.first_name, 
+                            user.patronymic, 
+                            review.visited_at, 
+                            review.rating, 
+                            review.comment
+                        ));
+                        list.innerHTML += card;
+                    }
                     
                 }));
         }

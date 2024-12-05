@@ -146,7 +146,15 @@
                     for(let i = 0; i < body.length; i++) {
                         let review = body[i];
                         let user = review.user;
-                        let card = generateReviewCard(user.nickname, user.last_name, user.first_name, user.patronymic, review.visited_at, review.rating, review.comment);
+                        let card = generateReviewCard(
+                            user.nickname, 
+                            user.last_name, 
+                            user.first_name, 
+                            user.patronymic, 
+                            review.visited_at, 
+                            review.rating, 
+                            review.comment
+                        );
                         document.getElementById("reviews").innerHTML += card;
                     }
                 }));
