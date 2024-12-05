@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import db
 from app.user_service import create_user, get_user_by_id, visit_courtyard, search_users, update_user, \
-    visit_courtyard_by_titles, search_visits, authenticate_user, get_user_by_nickname
+    visit_courtyard_by_titles, search_visits, authenticate_user, get_user_by_nickname, statistic_visits
 from app.courtyard_service import create_courtyard, search_courtyards, get_courtyard_by_id, get_courtyard_by_title
 
 app = FastAPI()
@@ -100,6 +100,19 @@ def get_visits(courtyard_id: str = None, courtyard_title: str = None, courtyard_
                          visited_from=visited_from, visited_to=visited_to, comment_exists=comment_exists,
                          comment=comment, rating=rating,
                          limit=limit, skip=skip)
+
+
+@app.get("/statistic/visits")
+def get_visit_statistics(courtyard_title: str = None, courtyard_address: str = None,
+                         courtyard_rating_from: float = None, courtyard_rating_to: float = None,
+                         longitude_from: float = None, longitude_to: float = None,
+                         latitude_from: float = None, latitude_to: float = None,
+                         visited_from: str = None, visited_to: str = None, comment_exists: bool = None):
+    return statistic_visits(courtyard_title=courtyard_title, courtyard_address=courtyard_address,
+                            courtyard_rating_from=courtyard_rating_from, courtyard_rating_to=courtyard_rating_to,
+                            longitude_from=longitude_from, longitude_to=longitude_to,
+                            latitude_from=latitude_from, latitude_to=latitude_to,
+                            visited_from=visited_from, visited_to=visited_to, comment_exists=comment_exists)
 
 
 @app.get("/courtyards/{courtyard_id}/visits")
@@ -217,6 +230,22 @@ def initialize_demo_data():
                 "nickname": "sidorov",
                 "password": "$2b$12$XI2tINfrLsf5YWKoePOnTOZRGQ5jGp0K7Ciand3r9hTcmin5l4jLK",  # password
                 "avatar_url": "https://ui-avatars.com/api/?name=John+Doe"
+            },
+            {
+                "last_name": "Михайлов",
+                "first_name": "Александр",
+                "patronymic": "Андреевич",
+                "nickname": "alexander",
+                "password": "password123",
+                "avatar_url": "https://ui-avatars.com/api/?name=Alexander+M"
+            },
+            {
+                "last_name": "Федоров",
+                "first_name": "Федор",
+                "patronymic": "Федорович",
+                "nickname": "fedor",
+                "password": "qwerty",
+                "avatar_url": "https://ui-avatars.com/api/?name=Fedor+F"
             }
         ],
         'courtyards': [
@@ -260,37 +289,57 @@ def initialize_demo_data():
                                 {"latitude": 59.96353266779311, "longitude": 30.306842412199025},
                                 {"latitude": 59.96350106380885, "longitude": 30.30679010912323},
                                 {"latitude": 59.96356897871644, "longitude": 30.306621129955296}]
-
+            },
+            {
+                "title": "Дом-кольцо",
+                "houses": ["Набережная реки Фонтанки, д. 92", "Гороховая, д. 59"],
+                "coordinates": [{"latitude": 59.92423141028, "longitude": 30.326314718246422},
+                                {"latitude": 59.9238032363252, "longitude": 30.3271569318771},
+                                {"latitude": 59.924185630939455, "longitude": 30.32791867923733},
+                                {"latitude": 59.924376826588414, "longitude": 30.32659366798397}]
+            },
+            {
+                "title": "Каменноостровский двор",
+                "houses": ["Каменноостровский пр., д. 44Б"],
+                "coordinates": [{"latitude": 59.96856714267573, "longitude": 30.307527404754605},
+                                {"latitude": 59.968400406314096, "longitude": 30.307666879623394},
+                                {"latitude": 59.96859403555843, "longitude": 30.3085144576721},
+                                {"latitude": 59.96875001384595, "longitude": 30.308332067459073}]
             }
         ],
         'visits': [
-            {
-                'username': 'ivanov',
-                'courtyard_title': 'Двор дома-утюга',
-                'visited_at': '2024-11-08',
-                'rating': 5,
-                'comment': 'Отличный двор!',
-            },
-            {
-                'username': 'ivanov',
-                'courtyard_title': 'Двор-восьмиугольник',
-                'visited_at': "2024-11-09",
-                'rating': 3,
-                'comment': 'Двор так себе, видел и лучше.',
-            },
-            {
-                'username': 'petrov',
-                'courtyard_title': 'Двор-восьмиугольник',
-                'visited_at': "2024-11-09",
-                'rating': 4,
-            },
-            {
-                'username': 'ivanov',
-                'courtyard_title': 'Бармалеева, 4',
-                'visited_at': "2024-11-11",
-                'rating': 5,
-                'comment': 'Крайне советую это место, было очень интересно здесь побывать'
-            }
+            {'username': 'ivanov', 'courtyard_title': 'Двор дома-утюга', 'visited_at': '2024-11-28', 'rating': 5,
+             'comment': 'Круто!'},
+            {'username': 'petrov', 'courtyard_title': 'Двор дома-утюга', 'visited_at': '2024-11-28', 'rating': 4},
+            {'username': 'sidorov', 'courtyard_title': 'Двор дома-утюга', 'visited_at': '2024-11-29', 'rating': 3},
+            {'username': 'alexander', 'courtyard_title': 'Двор дома-утюга', 'visited_at': '2024-11-20', 'rating': 5,
+             'comment': 'Хороший двор!'},
+            {'username': 'fedor', 'courtyard_title': 'Двор дома-утюга', 'visited_at': '2024-11-21', 'rating': 4},
+
+            {'username': 'ivanov', 'courtyard_title': 'Двор-восьмиугольник', 'visited_at': "2024-11-29", 'rating': 3},
+            {'username': 'petrov', 'courtyard_title': 'Двор-восьмиугольник', 'visited_at': "2024-11-20", 'rating': 4},
+            {'username': 'sidorov', 'courtyard_title': 'Двор-восьмиугольник', 'visited_at': "2024-11-20", 'rating': 2,
+             'comment': 'Мне не понравилось'},
+            {'username': 'alexander', 'courtyard_title': 'Двор-восьмиугольник', 'visited_at': "2024-11-21",
+             'rating': 3},
+
+            {'username': 'ivanov', 'courtyard_title': 'Бармалеева, 4', 'visited_at': "2024-11-21", 'rating': 5,
+             'comment': 'Круто!'},
+            {'username': 'petrov', 'courtyard_title': 'Бармалеева, 4', 'visited_at': "2024-11-22", 'rating': 4},
+            {'username': 'alexander', 'courtyard_title': 'Бармалеева, 4', 'visited_at': "2024-11-23", 'rating': 5,
+             'comment': 'Отличный двор!'},
+            {'username': 'fedor', 'courtyard_title': 'Бармалеева, 4', 'visited_at': "2024-11-24", 'rating': 3},
+
+            {'username': 'ivanov', 'courtyard_title': 'Дом-кольцо', 'visited_at': "2024-11-20", 'rating': 5,
+             'comment': 'Было очень интересно!'},
+            {'username': 'sidorov', 'courtyard_title': 'Дом-кольцо', 'visited_at': "2024-11-21",
+             'rating': 4},
+
+            {'username': 'petrov', 'courtyard_title': 'Каменноостровский двор', 'visited_at': "2024-11-21",
+             'rating': 2, 'comment': 'Мне не понравилось'},
+            {'username': 'alexander', 'courtyard_title': 'Каменноостровский двор', 'visited_at': "2024-11-22",
+             'rating': 3},
+            {'username': 'fedor', 'courtyard_title': 'Каменноостровский двор', 'visited_at': "2024-11-23", 'rating': 4},
         ]
     }
 

@@ -307,3 +307,46 @@ def search_visits(courtyard_id: str = None, courtyard_title: str = None, courtya
         "limit": limit,
         "skip": skip
     })
+
+
+def statistic_visits(courtyard_title: str = None, courtyard_address: str = None,
+                  courtyard_rating_from: float = None, courtyard_rating_to: float = None,
+                  longitude_from: float = None, longitude_to: float = None,
+                  latitude_from: float = None, latitude_to: float = None,
+                  visited_from: str = None, visited_to: str = None, comment_exists: bool = None):
+    visit_filters, courtyard_params = get_courtyards_filters(title=courtyard_title, address=courtyard_address,
+                                                                 rating_from=courtyard_rating_from,
+                                                                 rating_to=courtyard_rating_to,
+                                                                 longitude_from=longitude_from,
+                                                                 longitude_to=longitude_to,
+                                                                 latitude_from=latitude_from,
+                                                                 latitude_to=latitude_to)
+
+    if visited_from:
+        visit_filters.append("v.visited_at >= $visited_from")
+    if visited_to:
+        visit_filters.append("v.visited_at <= $visited_to")
+    if comment_exists:
+        visit_filters.append("v.comment <> \"\"")
+
+    filter_query = " AND ".join(visit_filters) if visit_filters else "1=1"
+
+    query = """
+    MATCH (c:Courtyard)<-[v:VISITED]-(:User)
+    WHERE """ + filter_query + """
+    WITH v.visited_at AS visit_day,
+         AVG(v.rating) AS average_rating,
+         COUNT(v) AS visit_count,
+         COUNT(CASE WHEN v.comment <> "" THEN 1 END) AS review_count
+    RETURN visit_day,
+           average_rating,
+           visit_count,
+           review_count
+    ORDER BY visit_day ASC
+    """
+
+    return db.query(query, {
+        **courtyard_params,
+        "visited_from": visited_from,
+        "visited_to": visited_to,
+    })
