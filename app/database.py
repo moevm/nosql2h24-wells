@@ -23,7 +23,6 @@ class Database:
         try:
             print("Запрос:", query)
             print("С параметрами:", parameters)
-
             result = session_used.run(query, parameters or {})
             results_data = [record.data() for record in result]
 
