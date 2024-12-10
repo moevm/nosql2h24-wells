@@ -317,7 +317,7 @@ def initialize_demo_data():
             {'username': 'petrov', 'courtyard_title': 'Двор-восьмиугольник', 'visited_at': "2024-11-20", 'rating': 4},
             {'username': 'sidorov', 'courtyard_title': 'Двор-восьмиугольник', 'visited_at': "2024-11-20", 'rating': 2,
              'comment': 'Мне не понравилось'},
-            {'username': 'alexander', 'courtyard_title': 'Двор-восьмиугольник', 'visited_at': "2024-11-21",'rating': 3},
+            {'username': 'alexander', 'courtyard_title': 'Двор-восьмиугольник', 'visited_at': "2024-11-21", 'rating': 3},
 
             {'username': 'ivanov', 'courtyard_title': 'Бармалеева, 4', 'visited_at': "2024-11-21", 'rating': 5,
              'comment': 'Круто!'},
