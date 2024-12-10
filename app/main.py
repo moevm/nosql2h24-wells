@@ -328,7 +328,7 @@ def initialize_demo_data():
 
             {'username': 'ivanov', 'courtyard_title': 'Дом-кольцо', 'visited_at': "2024-11-20", 'rating': 5,
              'comment': 'Было очень интересно!'},
-            {'username': 'sidorov', 'courtyard_title': 'Дом-кольцо', 'visited_at': "2024-11-21",'rating': 4},
+            {'username': 'sidorov', 'courtyard_title': 'Дом-кольцо', 'visited_at': "2024-11-21", 'rating': 4},
 
             {'username': 'petrov', 'courtyard_title': 'Каменноостровский двор', 'visited_at': "2024-11-21",
              'rating': 2, 'comment': 'Мне не понравилось'},
