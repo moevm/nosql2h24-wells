@@ -30,7 +30,7 @@ class Database:
 
             return results_data
         finally:
-            if not self.tx and not self.session:  # Close only temporary session
+            if not self.tx and not self.session:
                 session_used.close()
 
     def begin(self):
