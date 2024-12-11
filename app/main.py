@@ -152,7 +152,7 @@ def import_data(data: dict):
             for user in data['users']:
                 exists = get_user_by_nickname(user['nickname'])
                 if not exists:
-                    create_user(user, hash_password=False)
+                    create_user(user)
 
         if 'courtyards' in data:
             for courtyard in data['courtyards']:
@@ -212,7 +212,7 @@ def initialize_demo_data():
                 "first_name": "Иван",
                 "patronymic": "Иванович",
                 "nickname": "ivanov",
-                "password": "$2b$12$XI2tINfrLsf5YWKoePOnTOZRGQ5jGp0K7Ciand3r9hTcmin5l4jLK",
+                "password": "password",
                 "avatar_url": "https://ui-avatars.com/api/?name=John+Doe"
             },
             {
@@ -228,7 +228,7 @@ def initialize_demo_data():
                 "first_name": "Николай",
                 "patronymic": "Николаевич",
                 "nickname": "sidorov",
-                "password": "$2b$12$XI2tINfrLsf5YWKoePOnTOZRGQ5jGp0K7Ciand3r9hTcmin5l4jLK",  # password
+                "password": "password",
                 "avatar_url": "https://ui-avatars.com/api/?name=John+Doe"
             },
             {
@@ -328,7 +328,7 @@ def initialize_demo_data():
 
             {'username': 'ivanov', 'courtyard_title': 'Дом-кольцо', 'visited_at': "2024-11-20", 'rating': 5,
              'comment': 'Было очень интересно!'},
-            {'username': 'sidorov', 'courtyard_title': 'Дом-кольцо', 'visited_at': "2024-11-21", 'rating': 4},
+            {'username': 'sidorov', 'courtyard_title': 'Дом-кольцо', 'visited_at': "2024-11-21",'rating': 4},
 
             {'username': 'petrov', 'courtyard_title': 'Каменноостровский двор', 'visited_at': "2024-11-21",
              'rating': 2, 'comment': 'Мне не понравилось'},
