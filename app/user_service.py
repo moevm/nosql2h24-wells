@@ -258,13 +258,15 @@ def search_visits(courtyard_id: str = None, courtyard_title: str = None, courtya
     query = """
     MATCH (u:User)-[v:VISITED]->(c:Courtyard)
     MATCH (c)<-[:BOUNDS]-(h:House)
-    WITH c, u, v, h,
+    MATCH (c)-[:LOCATED_AT]->(start:Coordinate)
+    MATCH (start)-[:NEXT*0..]->(coords:Coordinate)
+    WITH c, u, v, h, coords,
          elementId(u) AS user_id, elementId(c) AS courtyard_id
     OPTIONAL MATCH (c)<-[v_all:VISITED]-(:User)
-    WITH c, u, v, h, user_id, courtyard_id,
+    WITH c, u, v, h, coords, user_id, courtyard_id,
          avg(v_all.rating) AS average_rating
     OPTIONAL MATCH (u)-[:VISITED]->(unique_courtyard:Courtyard)
-    WITH c, u, v, h, user_id, courtyard_id, average_rating,
+    WITH c, u, v, h, coords, user_id, courtyard_id, average_rating,
         COLLECT(DISTINCT h.address) AS houses,
         COUNT(DISTINCT unique_courtyard) AS visited_courtyards
     WHERE """ + filter_query + """
@@ -310,17 +312,15 @@ def search_visits(courtyard_id: str = None, courtyard_title: str = None, courtya
 
 
 def statistic_visits(courtyard_title: str = None, courtyard_address: str = None,
-                  courtyard_rating_from: float = None, courtyard_rating_to: float = None,
-                  longitude_from: float = None, longitude_to: float = None,
-                  latitude_from: float = None, latitude_to: float = None,
-                  visited_from: str = None, visited_to: str = None, comment_exists: bool = None):
+                     courtyard_rating_from: float = None, courtyard_rating_to: float = None,
+                     longitude_from: float = None, longitude_to: float = None,
+                     latitude_from: float = None, latitude_to: float = None,
+                     visited_from: str = None, visited_to: str = None, comment_exists: bool = None):
     visit_filters, courtyard_params = get_courtyards_filters(title=courtyard_title, address=courtyard_address,
-                                                                 rating_from=courtyard_rating_from,
-                                                                 rating_to=courtyard_rating_to,
-                                                                 longitude_from=longitude_from,
-                                                                 longitude_to=longitude_to,
-                                                                 latitude_from=latitude_from,
-                                                                 latitude_to=latitude_to)
+                                                             longitude_from=longitude_from,
+                                                             longitude_to=longitude_to,
+                                                             latitude_from=latitude_from,
+                                                             latitude_to=latitude_to)
 
     if visited_from:
         visit_filters.append("v.visited_at >= $visited_from")
@@ -329,16 +329,26 @@ def statistic_visits(courtyard_title: str = None, courtyard_address: str = None,
     if comment_exists:
         visit_filters.append("v.comment <> \"\"")
 
+    rating_filters = []
+    if courtyard_rating_from is not None:
+        rating_filters.append("average_rating >= $rating_from")
+    if courtyard_rating_to is not None:
+        rating_filters.append("average_rating <= $rating_to")
+
     filter_query = " AND ".join(visit_filters) if visit_filters else "1=1"
+    rating_filter_query = " AND ".join(rating_filters) if rating_filters else "1=1"
 
     query = """
     MATCH (c:Courtyard)<-[v:VISITED]-(:User)
-    WITH c, v, avg(v.rating) AS average_rating
+    MATCH (c)<-[:BOUNDS]-(h:House)
+    MATCH (c)-[:LOCATED_AT]->(start:Coordinate)
+    MATCH (start)-[:NEXT*0..]->(coords:Coordinate)
     WHERE """ + filter_query + """
     WITH v.visited_at AS visit_day,
-         average_rating,
+         avg(v.rating) AS average_rating,
          COUNT(v) AS visit_count,
-         COUNT(CASE WHEN v.comment <> "" THEN 1 END) AS review_count
+         COUNT(CASE WHEN v.comment IS NOT NULL AND v.comment <> "" THEN 1 END) AS review_count
+    WHERE """ + rating_filter_query + """
     RETURN visit_day,
            average_rating,
            visit_count,
@@ -350,4 +360,6 @@ def statistic_visits(courtyard_title: str = None, courtyard_address: str = None,
         **courtyard_params,
         "visited_from": visited_from,
         "visited_to": visited_to,
+        "rating_from": courtyard_rating_from,
+        "rating_to": courtyard_rating_to,
     })
