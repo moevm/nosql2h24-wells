@@ -42,12 +42,18 @@
             </div>
     
             <div class="form-group mt-4">
-                <label for="type">Статистика:</label>
-                <select class="form-control" id="type" onchange="setGraph(this.value)">
-                    <option value="visit_count">Кол-во посещений в день</option>
-                    <option value="average_rating">Средний рейтинг</option>
-                    <option value="review_count">Кол-во отзывов</option>
-                </select>
+                <div class="form-row">
+                    <div class="col">
+                            <p class="text-right mr-2" style="font-size:2em"> Статистика: </p>
+                    </div>
+                    <div class="col">
+                        <select class="form-control" id="type" onchange="setGraph(this.value)">
+                            <option value="visit_count">Кол-во посещений в день</option>
+                            <option value="average_rating">Средний рейтинг</option>
+                            <option value="review_count">Кол-во отзывов</option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
         </div>
