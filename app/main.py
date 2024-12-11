@@ -317,8 +317,7 @@ def initialize_demo_data():
             {'username': 'petrov', 'courtyard_title': 'Двор-восьмиугольник', 'visited_at': "2024-11-20", 'rating': 4},
             {'username': 'sidorov', 'courtyard_title': 'Двор-восьмиугольник', 'visited_at': "2024-11-20", 'rating': 2,
              'comment': 'Мне не понравилось'},
-            {'username': 'alexander', 'courtyard_title': 'Двор-восьмиугольник', 'visited_at': "2024-11-21",
-             'rating': 3},
+            {'username': 'alexander', 'courtyard_title': 'Двор-восьмиугольник', 'visited_at': "2024-11-21", 'rating': 3},
 
             {'username': 'ivanov', 'courtyard_title': 'Бармалеева, 4', 'visited_at': "2024-11-21", 'rating': 5,
              'comment': 'Круто!'},
@@ -329,13 +328,11 @@ def initialize_demo_data():
 
             {'username': 'ivanov', 'courtyard_title': 'Дом-кольцо', 'visited_at': "2024-11-20", 'rating': 5,
              'comment': 'Было очень интересно!'},
-            {'username': 'sidorov', 'courtyard_title': 'Дом-кольцо', 'visited_at': "2024-11-21",
-             'rating': 4},
+            {'username': 'sidorov', 'courtyard_title': 'Дом-кольцо', 'visited_at': "2024-11-21", 'rating': 4},
 
             {'username': 'petrov', 'courtyard_title': 'Каменноостровский двор', 'visited_at': "2024-11-21",
              'rating': 2, 'comment': 'Мне не понравилось'},
-            {'username': 'alexander', 'courtyard_title': 'Каменноостровский двор', 'visited_at': "2024-11-22",
-             'rating': 3},
+            {'username': 'alexander', 'courtyard_title': 'Каменноостровский двор', 'visited_at': "2024-11-22", 'rating': 3},
             {'username': 'fedor', 'courtyard_title': 'Каменноостровский двор', 'visited_at': "2024-11-23", 'rating': 4},
         ]
     }

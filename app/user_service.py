@@ -86,7 +86,7 @@ def get_user_by_id(user_id: str):
 
 
 def update_user(user_id: str, user_data: dict):
-    get_user_by_id(user_id)  # verify that user exists
+    get_user_by_id(user_id)  # check user exists
 
     if 'nickname' in user_data:
         existing = get_user_by_nickname(user_data['nickname'])

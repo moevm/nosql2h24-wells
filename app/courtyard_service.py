@@ -117,7 +117,7 @@ def search_courtyards(title: str = None, address: str = None,
 def get_courtyards_filters(title: str = None, address: str = None,
                            rating_from: float = None, rating_to: float = None,
                            longitude_from: float = None, longitude_to: float = None,
-                           latitude_from: float = None, latitude_to: float = None, ):
+                           latitude_from: float = None, latitude_to: float = None):
     filters = []
     if title:
         filters.append("toLower(c.title) CONTAINS toLower($title)")
