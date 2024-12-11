@@ -72,8 +72,7 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body:
-                        e.target.result
+                    body: e.target.result
                 })
                     .then((resp) => resp.json().then((body) => {
                         console.log(body);
