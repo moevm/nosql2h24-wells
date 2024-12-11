@@ -64,8 +64,9 @@
         
         function importData(input) {
 			const file = input.files[0];
-            console.log(file); 
+            
             const reader = new FileReader(); 
+            
             reader.onload = function (e) { 
                 fetch(`http://localhost:8081/import`, { 
                     method: 'POST',
