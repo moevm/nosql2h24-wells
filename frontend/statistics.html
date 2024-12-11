@@ -35,17 +35,6 @@
                     </div>
                 </div>
 
-                <div class="form-row">
-                    <div class="col doubled">
-                        <input name="longitude_from" type="number" class="form-control" placeholder="Долгота, от">
-                        <input name="longitude_to" type="number" class="form-control" placeholder="Долгота, до">
-                    </div>
-                    <div class="col doubled">
-                        <input name="latitude_from" type="number" class="form-control" placeholder="Широта, от">
-                        <input name="latitude_to" type="number" class="form-control" placeholder="Широта, до">
-                    </div>
-                </div>
-
             </form>
 
             <div class="mt-4">
@@ -95,33 +84,19 @@
             const visit_date_min = document.querySelector("input[name='visit_date_min']").value;
             const visit_date_max = document.querySelector("input[name='visit_date_max']").value;
 
-            const longitude_from = document.querySelector("input[name='longitude_from']").value;
-            const longitude_to = document.querySelector("input[name='longitude_to']").value;
-
-            const latitude_from = document.querySelector("input[name='latitude_from']").value;
-            const latitude_to = document.querySelector("input[name='latitude_to']").value;
-
             let params = {};
             if (address) 
                 params.address = address;
             if (title) 
                 params.title = title;
             if (rating_from) 
-                params.rating_from = rating_from;
+                params.courtyard_rating_from = rating_from;
             if (rating_to) 
-                params.rating_to = rating_to;
+                params.courtyard_rating_to = rating_to;
             if (visit_date_min) 
                 params.visited_from = visit_date_min;
             if (visit_date_max) 
                 params.visited_to = visit_date_max;
-            if (longitude_from) 
-                params.longitude_from = longitude_from;
-            if (longitude_to) 
-                params.longitude_to = longitude_to;
-            if (latitude_from) 
-                params.latitude_from = latitude_from;
-            if (latitude_to) 
-                params.latitude_to = latitude_to;
 
             fetch(`http://localhost:8081/statistic/visits?` + new URLSearchParams(params).toString(), { 
                 method: 'GET',

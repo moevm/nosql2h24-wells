@@ -61,7 +61,7 @@
                     downloadObjectAsJson(body, 'data');
                 }));
         }
-
+        
         function showFiles(input) {
 			const file = input.files[0];
             console.log(file); 
@@ -72,16 +72,15 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        data: e.target.result
-                    })
+                    body:
+                        e.target.result
                 })
                     .then((resp) => resp.json().then((body) => {
                         console.log(body);
                     }));
                 
             }; 
-            reader.readAsDataURL(file); 
+            reader.readAsText(file);
         }
     </script>
 </body>
