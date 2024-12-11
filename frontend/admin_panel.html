@@ -15,7 +15,7 @@
             <div class="mb-4">
                 <div class="form-row mb-3">
                     <div class="col">
-                        <input type="file" id="customFile" accept=".json" onchange="showFiles(this)" style="display: none;"> 
+                        <input type="file" id="customFile" accept=".json" onchange="importData(this)" style="display: none;"> 
                         <button class="btn btn-primary btn-block" type="button" onclick="document.getElementById('customFile').click()"> 
                             Import 
                         </button> 
@@ -62,7 +62,7 @@
                 }));
         }
         
-        function showFiles(input) {
+        function importData(input) {
 			const file = input.files[0];
             console.log(file); 
             const reader = new FileReader(); 
