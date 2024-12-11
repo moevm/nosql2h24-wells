@@ -333,9 +333,10 @@ def statistic_visits(courtyard_title: str = None, courtyard_address: str = None,
 
     query = """
     MATCH (c:Courtyard)<-[v:VISITED]-(:User)
+    WITH c, v, avg(v.rating) AS average_rating
     WHERE """ + filter_query + """
     WITH v.visited_at AS visit_day,
-         AVG(v.rating) AS average_rating,
+         average_rating,
          COUNT(v) AS visit_count,
          COUNT(CASE WHEN v.comment <> "" THEN 1 END) AS review_count
     RETURN visit_day,
