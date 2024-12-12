@@ -26,7 +26,7 @@
                         <input name="patronymic" type="text" class="form-control" placeholder="Отчество">
                     </div>
                 </div>
-                <div class="form-row">
+                <div class="form-row mb-3">
                     <div class="col">
                         <input name="username" type="text" class="form-control" placeholder="Никнейм">
                     </div>
@@ -34,15 +34,20 @@
                         <input name="min_visits" type="number" min="0" class="form-control" placeholder="Посетил, от">
                         <input name="max_visits" type="number" min="0" class="form-control" placeholder="Посетил, до">
                     </div>
+                    <div class="col doubled">
+                        <input class="form-control" type="date" name="created_at_from" value="" min="2000-01-01">
+                        <input class="form-control" type="date" name="created_at_to" value="" min="2000-01-01">
+                    </div>
+                </div>
+                <div class="form-row">
                     <div class="col">
                         <button type="submit" class="btn btn-primary btn-block" id="find" onclick="findUsers()">Найти</button>
                     </div>
                 </div>
             </div>
+            
             <div class="row" id="found-users-list">
                 
-
-
             </div>
         </div>
     </div>
@@ -56,7 +61,9 @@
             const username = document.querySelector("input[name='username']").value;
             const min_visits = document.querySelector("input[name='min_visits']").value;
             const max_visits = document.querySelector("input[name='max_visits']").value;
-
+            const created_at_from = document.querySelector("input[name='created_at_from']").value;
+            const created_at_to = document.querySelector("input[name='created_at_to']").value;
+            // new Date('2024-12-12').getTime()
             let data = {
                 last_name: last_name,
                 first_name: first_name,
@@ -66,6 +73,10 @@
             };
             if (max_visits) 
                 data.max_visits = max_visits;
+            if (created_at_from) 
+                data.created_at_from = new Date(created_at_from).getTime();
+            if (created_at_to) 
+                data.created_at_to = new Date(created_at_to).getTime();
             
             console.log(data);
             let list = document.getElementById("found-users-list");
