@@ -26,9 +26,9 @@
                         <input name="rating_from" type="number" min="1" max="5" class="form-control" placeholder="Рейтинг, от">
                         <input name="rating_to" type="number" min="1" max="5" class="form-control" placeholder="Рейтинг, до">
                     </div>
-                    
                 </div>
-                <div class="form-row">
+
+                <div class="form-row mb-3">
                     <div class="col doubled">
                         <input name="longitude_from" type="number" class="form-control" placeholder="Долгота, от">
                         <input name="longitude_to" type="number" class="form-control" placeholder="Долгота, до">
@@ -37,19 +37,20 @@
                         <input name="latitude_from" type="number" class="form-control" placeholder="Широта, от">
                         <input name="latitude_to" type="number" class="form-control" placeholder="Широта, до">
                     </div>
+                    <div class="col doubled">
+                        <input name="visitors_from" type="number" class="form-control" placeholder="Посещений, от">
+                        <input name="visitors_to" type="number" class="form-control" placeholder="Посещений, до">
+                    </div>
+                </div>
+
+                <div class="form-row">
                     <div class="col">
                         <button type="submit" class="btn btn-primary btn-block" onclick="findCourtyards()">Найти</button>
                     </div>
                 </div>
             </div>
 
-            <div class="list-group">
-                
-            </div>
-
             <div class="row" id="found-courtyards-list">
-                
-
                 
             </div>
         </div>
@@ -71,6 +72,9 @@
             const longitude_from = document.querySelector("input[name='longitude_from']").value;
             const longitude_to = document.querySelector("input[name='longitude_to']").value;
 
+            const visitors_from = document.querySelector("input[name='visitors_from']").value;
+            const visitors_to = document.querySelector("input[name='visitors_to']").value;
+
             let data = {
                 address: address,
                 title: title,
@@ -87,7 +91,10 @@
                 data.longitude_from = longitude_from;
             if (longitude_to) 
                 data.longitude_to = longitude_to;
-
+            if (visitors_from) 
+                data.visitors_from = visitors_from;
+            if (visitors_to) 
+                data.visitors_to = visitors_to;
 
             console.log(data);
             let list = document.getElementById("found-courtyards-list");
