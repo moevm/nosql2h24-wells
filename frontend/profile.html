@@ -40,10 +40,13 @@
                             <input class="form-control mr-2" type="date" name="start_date" oninput="filterVisits()">
                             <input class="form-control" type="date" name="end_date" oninput="filterVisits()">
                         </div>
+                        <div class="d-flex mb-3">
+                            <input class="form-control mr-2" placeholder="Рейтинг, от" type="number" name="courtyard_rating_from" oninput="filterVisits()">
+                            <input class="form-control" placeholder="Рейтинг, до" type="number" name="courtyard_rating_to" oninput="filterVisits()">
+                        </div>
+
                         <div class="list-group" id="visits">
                             
-                            
-                            <!-- More visited yards if needed -->
                         </div>
                     </div>
                 </div>
@@ -62,13 +65,19 @@
         function filterVisits() {
             const startDate = document.querySelector("input[name='start_date']").value;
             const endDate = document.querySelector("input[name='end_date']").value;
+            const ratingFrom = document.querySelector("input[name='courtyard_rating_from']").value;
+            const ratingTo = document.querySelector("input[name='courtyard_rating_to']").value;
             const courtyard = document.querySelector("input[name='courtyard']").value;
 
-            const data = {
+            let data = {
                 visited_from: startDate,
                 visited_to: endDate,
                 courtyard_title: courtyard
             };
+            if (ratingFrom)
+                data.courtyard_rating_from = ratingFrom;
+            if (ratingTo) 
+                data.courtyard_rating_to = ratingTo;
 
             // visits
             fetch(`http://localhost:8081/users/${id}/visits?` + new URLSearchParams(data).toString(), { 
