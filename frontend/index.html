@@ -122,10 +122,6 @@
                     preset: 'twirl#blueStretchyIcon' // иконка растягивается под контент
                 });
                 myPlacemark.events.add(['click'], function(e) {
-                    if (!localStorage.user_id) {
-                        window.location.href = "login.html";
-                        return;
-                    }
                     window.location.assign('courtyard.html?id=' + e.get('target').properties._data.id);
                 });
 
