@@ -165,9 +165,11 @@ def visit_courtyard_by_titles(visit: dict):
 
 
 def search_users(first_name: str = None, last_name: str = None, patronymic: str = None, nickname: str = None,
-                 min_visits: int = None, max_visits: int = None, limit: int = 10, skip: int = 0):
+                 min_visits: int = None, max_visits: int = None, created_at_from: int = None, created_at_to: int = None,
+                 limit: int = 10, skip: int = 0):
     filters, filter_params = get_user_filters(first_name=first_name, last_name=last_name, patronymic=patronymic,
-                                              nickname=nickname, min_visits=min_visits, max_visits=max_visits)
+                                              nickname=nickname, min_visits=min_visits, max_visits=max_visits,
+                                              created_at_from=created_at_from, created_at_to=created_at_to)
 
     filter_query = " AND ".join(filters) if filters else "1=1"
 
@@ -190,7 +192,8 @@ def search_users(first_name: str = None, last_name: str = None, patronymic: str 
 
 
 def get_user_filters(first_name: str = None, last_name: str = None, patronymic: str = None, nickname: str = None,
-                     min_visits: int = None, max_visits: int = None):
+                     min_visits: int = None, max_visits: int = None, created_at_from: int = None,
+                     created_at_to: int = None):
     filters = []
     if first_name:
         filters.append("toLower(u.first_name) CONTAINS toLower($first_name)")
@@ -204,6 +207,10 @@ def get_user_filters(first_name: str = None, last_name: str = None, patronymic: 
         filters.append("visited_courtyards >= $min_visits")
     if max_visits is not None:
         filters.append("visited_courtyards <= $max_visits")
+    if created_at_from is not None:
+        filters.append("u.created_at >= $created_at_from")
+    if created_at_to is not None:
+        filters.append("u.created_at <= $created_at_to")
 
     return filters, {
         "first_name": first_name,
@@ -212,6 +219,8 @@ def get_user_filters(first_name: str = None, last_name: str = None, patronymic: 
         "nickname": nickname,
         "min_visits": min_visits,
         "max_visits": max_visits,
+        "created_at_from": created_at_from,
+        "created_at_to": created_at_to,
     }
 
 

@@ -83,11 +83,19 @@ def search_courtyards(title: str = None, address: str = None,
                       rating_from: float = None, rating_to: float = None,
                       longitude_from: float = None, longitude_to: float = None,
                       latitude_from: float = None, latitude_to: float = None,
+                      visitors_from: int = None, visitors_to: int = None,
                       limit: int = 10, skip: int = 0):
     filters, filter_params = get_courtyards_filters(title=title, address=address,
                                                     rating_from=rating_from, rating_to=rating_to,
                                                     longitude_from=longitude_from, longitude_to=longitude_to,
                                                     latitude_from=latitude_from, latitude_to=latitude_to)
+    if visitors_from is not None:
+        filter_params["visitors_from"] = visitors_from
+        filters.append("visitors_count >= $visitors_from")
+    if visitors_to is not None:
+        filter_params["visitors_to"] = visitors_to
+        filters.append("visitors_count <= $visitors_to")
+
     filter_query = " AND ".join(filters) if filters else "1=1"
 
     query = """
@@ -114,7 +122,7 @@ def search_courtyards(title: str = None, address: str = None,
     })
 
 
-def     get_courtyards_filters(title: str = None, address: str = None,
+def get_courtyards_filters(title: str = None, address: str = None,
                            rating_from: float = None, rating_to: float = None,
                            longitude_from: float = None, longitude_to: float = None,
                            latitude_from: float = None, latitude_to: float = None):

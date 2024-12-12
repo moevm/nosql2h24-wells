@@ -65,9 +65,11 @@ async def update_user_profile(user_id: str, request: Request):
 
 @app.get("/users")
 def get_users(first_name: str = None, last_name: str = None, patronymic: str = None, nickname: str = None,
-              min_visits: int = None, max_visits: int = None, limit: int = 10, skip: int = 0):
+              min_visits: int = None, max_visits: int = None, created_at_from: int = None, created_at_to: int = None,
+              limit: int = 10, skip: int = 0):
     return search_users(first_name=first_name, last_name=last_name, patronymic=patronymic, nickname=nickname,
-                        min_visits=min_visits, max_visits=max_visits, limit=limit, skip=skip)
+                        min_visits=min_visits, max_visits=max_visits, created_at_from=created_at_from,
+                        created_at_to=created_at_to, limit=limit, skip=skip)
 
 
 @app.post("/visits")
@@ -136,11 +138,13 @@ def get_courtyards(title: str = None, address: str = None,
                    rating_from: float = None, rating_to: float = None,
                    longitude_from: float = None, longitude_to: float = None,
                    latitude_from: float = None, latitude_to: float = None,
+                   visitors_from: int = None, visitors_to: int = None,
                    limit: int = 10, skip: int = 0):
     return search_courtyards(title=title, address=address,
                              rating_from=rating_from, rating_to=rating_to,
                              longitude_from=longitude_from, longitude_to=longitude_to,
                              latitude_from=latitude_from, latitude_to=latitude_to,
+                             visitors_from=visitors_from, visitors_to=visitors_to,
                              limit=limit, skip=skip)
 
 
@@ -317,7 +321,8 @@ def initialize_demo_data():
             {'username': 'petrov', 'courtyard_title': 'Двор-восьмиугольник', 'visited_at': "2024-11-20", 'rating': 4},
             {'username': 'sidorov', 'courtyard_title': 'Двор-восьмиугольник', 'visited_at': "2024-11-20", 'rating': 2,
              'comment': 'Мне не понравилось'},
-            {'username': 'alexander', 'courtyard_title': 'Двор-восьмиугольник', 'visited_at': "2024-11-21", 'rating': 3},
+            {'username': 'alexander', 'courtyard_title': 'Двор-восьмиугольник', 'visited_at': "2024-11-21",
+             'rating': 3},
 
             {'username': 'ivanov', 'courtyard_title': 'Бармалеева, 4', 'visited_at': "2024-11-21", 'rating': 5,
              'comment': 'Круто!'},
@@ -328,11 +333,12 @@ def initialize_demo_data():
 
             {'username': 'ivanov', 'courtyard_title': 'Дом-кольцо', 'visited_at': "2024-11-20", 'rating': 5,
              'comment': 'Было очень интересно!'},
-            {'username': 'sidorov', 'courtyard_title': 'Дом-кольцо', 'visited_at': "2024-11-21",'rating': 4},
+            {'username': 'sidorov', 'courtyard_title': 'Дом-кольцо', 'visited_at': "2024-11-21", 'rating': 4},
 
             {'username': 'petrov', 'courtyard_title': 'Каменноостровский двор', 'visited_at': "2024-11-21",
              'rating': 2, 'comment': 'Мне не понравилось'},
-            {'username': 'alexander', 'courtyard_title': 'Каменноостровский двор', 'visited_at': "2024-11-22", 'rating': 3},
+            {'username': 'alexander', 'courtyard_title': 'Каменноостровский двор', 'visited_at': "2024-11-22",
+             'rating': 3},
             {'username': 'fedor', 'courtyard_title': 'Каменноостровский двор', 'visited_at': "2024-11-23", 'rating': 4},
         ]
     }
