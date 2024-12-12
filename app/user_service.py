@@ -346,8 +346,8 @@ def statistic_visits(courtyard_title: str = None, courtyard_address: str = None,
     WHERE """ + filter_query + """
     WITH v.visited_at AS visit_day,
          avg(v.rating) AS average_rating,
-         COUNT(v) AS visit_count,
-         COUNT(CASE WHEN v.comment IS NOT NULL AND v.comment <> "" THEN 1 END) AS review_count
+         COUNT(DISTINCT v) AS visit_count,
+         COUNT(DISTINCT CASE WHEN v.comment IS NOT NULL AND v.comment <> "" THEN v END) AS review_count
     WHERE """ + rating_filter_query + """
     RETURN visit_day,
            average_rating,
