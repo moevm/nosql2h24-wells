@@ -20,6 +20,7 @@ def get_user_by_nickname(nickname: str, with_password: bool = False):
     
     if not result or len(result) == 0:
         return None
+    
     return result[0]
 
 
