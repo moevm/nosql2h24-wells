@@ -146,6 +146,7 @@ def validate_visit(visit: dict) -> dict:
 
 def visit_courtyard(visit: dict):
     visit = validate_visit(visit)
+    
     return db.query(
         """
         MATCH (u:User) WHERE elementId(u) = $user_id
@@ -158,6 +159,7 @@ def visit_courtyard(visit: dict):
 
 def visit_courtyard_by_titles(visit: dict):
     visit = validate_visit(visit)
+    
     return db.query(
         """
         MATCH (u:User) WHERE u.nickname = $username
