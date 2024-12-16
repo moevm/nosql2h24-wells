@@ -193,6 +193,7 @@ def export_data():
         'visits': [],
     }
     visits = search_visits(limit=sys.maxsize)
+    
     for visit in visits:
         result['visits'].append({
             "username": visit['user']['nickname'],
