@@ -44,6 +44,7 @@ class Database:
         if self.tx:
             self.tx.commit()
             self.tx = None
+            
         if self.session:
             self.session.close()
             self.session = None
