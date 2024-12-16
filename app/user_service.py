@@ -85,6 +85,7 @@ def get_user_by_id(user_id: str):
     
     if not result or len(result) == 0:
         raise HTTPException(status_code=404, detail="User not found")
+    
     return result[0]
 
 
