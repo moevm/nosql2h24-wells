@@ -176,6 +176,7 @@ def import_data(data: dict):
                 existing = search_visits(courtyard_id=courtyard['id'], user_id=user['id'])
                 if len(existing) == 0:
                     visit_courtyard_by_titles(visit)
+                    
     except Exception as e:
         db.rollback()
         raise e
