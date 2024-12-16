@@ -53,6 +53,7 @@ class Database:
         if self.tx:
             self.tx.rollback()
             self.tx = None
+            
         if self.session:
             self.session.close()
             self.session = None
