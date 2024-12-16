@@ -36,6 +36,7 @@ class Database:
     def begin(self):
         if self.session is None:
             self.session = self.driver.session()
+            
         if self.tx is None:
             self.tx = self.session.begin_transaction()
 
