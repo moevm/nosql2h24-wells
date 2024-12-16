@@ -200,6 +200,7 @@ def export_data():
             "rating": visit['rating'],
             "comment": visit['comment'],
         })
+
     return result
 
 
