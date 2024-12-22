@@ -7,11 +7,11 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=account_circle" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=login,account_circle" />
 </head>
 <body>
     <a class="btn-primary floating-btn top" href="#" onclick="goToProfile()">
-        <span class="material-symbols-outlined btn-icon">
+        <span class="material-symbols-outlined btn-icon" id="profile_btn">
             account_circle
         </span>
     </a>
@@ -171,6 +171,11 @@
         }
 
         window.onload = () => {
+            if (localStorage.user_id) {
+                document.getElementById("profile_btn").innerHTML = "account_circle";
+            } else {
+                document.getElementById("profile_btn").innerHTML = "login";
+            }
             fetch('http://localhost:8081/users?limit=10', { 
                 // mode: 'no-cors', 
                 method: 'GET',
