@@ -63,7 +63,7 @@
             const max_visits = document.querySelector("input[name='max_visits']").value;
             const created_at_from = document.querySelector("input[name='created_at_from']").value;
             const created_at_to = document.querySelector("input[name='created_at_to']").value;
-            // new Date('2024-12-12').getTime()
+            
             let data = {
                 last_name: last_name,
                 first_name: first_name,
@@ -92,11 +92,13 @@
                         list.innerHTML = "<p>Ничего не найдено</p>";
                         return;
                     }
+                    console.log(body);
                     list.innerHTML = "";
                     body.forEach(user => 
                         list.innerHTML += addColumnClass(
-                            generateUserCard(
-                                user.nickname, user.last_name, user.first_name, user.patronymic, user.visited_courtyards, user.id
+                            generateAdvancedUserCard(
+                                user.nickname, user.last_name, user.first_name, user.patronymic, 
+                                user.visited_courtyards, timestampToDate(user.created_at), user.id
                             )
                         )
                     );

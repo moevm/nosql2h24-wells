@@ -63,6 +63,29 @@ function generateUserCard(username, last_name, first_name, patronymic, visited, 
             </div>`
 }
 
+function generateAdvancedUserCard(username, last_name, first_name, patronymic, visited, created_at, id) {
+
+    return `<div class="mb-3 advanced-search-card">
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>
+                        <span class="card-username">${username}</span> 
+                        <span class="card-aka">aka ${last_name} ${first_name} ${patronymic}</span>
+                        <br>
+                        <small class="text-danger">${visited} двора</small>
+                    </span>
+                    <span style="
+                        align-items: flex-end;
+                        display: flex;
+                        flex-direction: column;
+                    ">
+                        <a href="profile.html?id=${id}"><span class="material-icons purple f-24">open_in_new</span></a>
+                        <small class="">Зарегистрирован:</small> 
+                        <small>${created_at}</small>
+                    </span>
+                </div>
+            </div>`
+}
+
 function generateVisitCard(title, address, rating, visited_at, id) {
     rating = normalizeRating(rating);
     return `<div class="list-group-item">
