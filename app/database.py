@@ -36,6 +36,7 @@ class Database:
     def begin(self):
         if self.session is None:
             self.session = self.driver.session()
+            
         if self.tx is None:
             self.tx = self.session.begin_transaction()
 
@@ -43,6 +44,7 @@ class Database:
         if self.tx:
             self.tx.commit()
             self.tx = None
+            
         if self.session:
             self.session.close()
             self.session = None
@@ -51,6 +53,7 @@ class Database:
         if self.tx:
             self.tx.rollback()
             self.tx = None
+            
         if self.session:
             self.session.close()
             self.session = None

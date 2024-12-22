@@ -176,6 +176,7 @@ def import_data(data: dict):
                 existing = search_visits(courtyard_id=courtyard['id'], user_id=user['id'])
                 if len(existing) == 0:
                     visit_courtyard_by_titles(visit)
+                    
     except Exception as e:
         db.rollback()
         raise e
@@ -192,6 +193,7 @@ def export_data():
         'visits': [],
     }
     visits = search_visits(limit=sys.maxsize)
+    
     for visit in visits:
         result['visits'].append({
             "username": visit['user']['nickname'],
@@ -200,6 +202,7 @@ def export_data():
             "rating": visit['rating'],
             "comment": visit['comment'],
         })
+
     return result
 
 
