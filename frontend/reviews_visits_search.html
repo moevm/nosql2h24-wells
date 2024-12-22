@@ -32,13 +32,19 @@
                     
                 </div>
                 <div class="form-row">
-                    <div class="col doubled">
-                        <input name="longitude_from" type="number" class="form-control" placeholder="Долгота, от">
-                        <input name="longitude_to" type="number" class="form-control" placeholder="Долгота, до">
+                    <div class="col">
+                        <!-- Button to trigger the modal -->
+                        <button type="button" 
+                            class="btn btn-primary btn-block w-100" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#geoModal"
+                            onclick="openGeoModal()"
+                        >
+                            Фильтрация по координатам
+                        </button>
                     </div>
                     <div class="col doubled">
-                        <input name="latitude_from" type="number" class="form-control" placeholder="Широта, от">
-                        <input name="latitude_to" type="number" class="form-control" placeholder="Широта, до">
+                    
                     </div>
                     <div class="col">
 
@@ -103,23 +109,104 @@
             </div>
 
         </div>
-
     </div>
+    <!-- Modal -->
+    <div class="modal fade" 
+    id="geoModal" 
+    tabindex="-1" 
+    aria-labelledby="geoModalLabel" 
+    aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 60%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" 
+                    id="geoModalLabel">
+                    Фильтрация по зоне
+                </h5>
+            </div>
+            <div class="modal-body">
+                <div id="map" style="height: 60vh;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" 
+                        class="btn btn-secondary" 
+                        data-bs-dismiss="modal">
+                    Закрыть
+                </button>
+                <button type="button" 
+                        class="btn btn-primary"
+                        data-bs-dismiss="modal"
+                        onclick="saveCoords()">
+                    Применить
+                </button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=0faafbbe-1718-4c19-b6e2-46f316ed4ba5&lang=ru-RU" type="text/javascript"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script src="scripts/templates.js"></script>
+
     <script>
+        let polygon = null; 
+
+        let longitude_from = null;
+        let longitude_to = null;
+
+        let latitude_from = null;
+        let latitude_to = null;
+
+        function openGeoModal() {
+            if (polygon)
+                return;
+            ymaps.ready(init);
+            function init() {
+                var myMap = new ymaps.Map('map', {
+                    center: [59.9342802, 30.3350986], // lat lon
+                    zoom: 11,
+                    controls: ['zoomControl']
+                }, {
+                    searchControlProvider: 'yandex#search'
+                });
+
+                // Создаем многоугольник в виде прямоугольника.
+                polygon = new ymaps.Polygon([
+                    [
+                        [59.87, 30.2],
+                        [59.87, 30.45],
+                        [60.00, 30.45],
+                        [60.00, 30.2],
+                        [59.87, 30.2]
+                    ]
+                ]);
+                // Добавляем многоугольник на карту.
+                myMap.geoObjects.add(polygon);
+
+                // Включаем режим масштабирования.
+                polygon.editor.startFraming();
+
+                console.log(polygon.geometry.getCoordinates())
+            }
+        }
+
+        function saveCoords() {
+            console.log(polygon.geometry.getCoordinates())
+            let coords = polygon.geometry.getCoordinates()[0];
+            longitude_from = coords[0][1];
+            longitude_to = coords[2][1];
+            latitude_from = coords[0][0];
+            latitude_to = coords[2][0];
+        }
+
+
         function findVisits() {
             const address = document.querySelector("input[name='address']").value;
             const title = document.querySelector("input[name='title']").value;
 
             const rating_from = document.querySelector("input[name='rating_from']").value;
             const rating_to = document.querySelector("input[name='rating_to']").value;
-
-            const latitude_from = document.querySelector("input[name='latitude_from']").value;
-            const latitude_to = document.querySelector("input[name='latitude_to']").value;
-            
-            const longitude_from = document.querySelector("input[name='longitude_from']").value;
-            const longitude_to = document.querySelector("input[name='longitude_to']").value;
 
             const last_name = document.querySelector("input[name='last_name']").value;
             const first_name = document.querySelector("input[name='first_name']").value;
